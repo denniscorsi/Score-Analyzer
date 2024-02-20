@@ -26,22 +26,26 @@
     "@electron-forge/plugin-auto-unpack-natives": "^6.3.0",
     "@electron-forge/plugin-vite": "^6.3.0",
     "@tailwindcss/typography": "^0.5.9",
-    "autoprefixer": "^10.4.15",
-    "electron": "26.0.0",
-    "postcss": "^8.4.28",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
-    "@vitejs/plugin-react": "^4.0.4"
+    "@vitejs/plugin-react": "^4.0.4",
+    "autoprefixer": "^10.4.15",
+    "electron": "26.0.0",
+    "postcss": "^8.4.28"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/material": "^5.15.10",
     "electron-squirrel-startup": "^1.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rehype-sanitize": "^5.0.1",
     "rehype-stringify": "^9.0.4",
     "remark-gfm": "^3.0.1",
     "remark-parse": "^10.0.2",
     "remark-rehype": "^10.1.0",
-    "unified": "^11.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "unified": "^11.0.1"
   }
 }
