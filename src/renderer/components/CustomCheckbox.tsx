@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
-import { Typography, Box, Checkbox, FormControlLabel } from '@mui/material';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
-const CustomCheckbox = ({ label }) => {
+interface CustomCheckboxComponent {
+  label: string;
+  isEnabled: boolean;
+}
+
+const CustomCheckbox: React.FC<CustomCheckboxComponent> = ({
+  label,
+  isEnabled,
+}) => {
   return (
     <FormControlLabel
       control={<Checkbox />}
       label={label}
       style={{ display: 'block' }}
+      disabled={!isEnabled}
     />
   );
 };

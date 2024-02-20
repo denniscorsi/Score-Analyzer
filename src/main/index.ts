@@ -1,8 +1,11 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
-import { join } from 'path';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { join, basename } from 'path';
+
+let window: BrowserWindow | null = null;
+let filePath: string | null = null;
 
 const createWindow = () => {
-  const mainWindow = new BrowserWindow({
+  window = new BrowserWindow({
     width: 1300,
     height: 1000,
     webPreferences: {
@@ -11,16 +14,29 @@ const createWindow = () => {
   });
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    window.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(
+    window.loadFile(
       join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
     );
   }
 
-  return mainWindow;
+  return window;
 };
 
 app.on('ready', () => {
-  const mainWindow = createWindow();
+  createWindow();
+});
+
+ipcMain.handle('load-file', async () => {
+  const result = await dialog.showOpenDialog(window!, {
+    properties: ['openFile'],
+    filters: [
+      { name: 'CSVs', extensions: ['csv', 'xls', 'xlsx', 'txt', 'Numbers'] },
+    ],
+  });
+
+  if (result.canceled) return null;
+  [filePath] = result.filePaths;
+  return basename(filePath);
 });

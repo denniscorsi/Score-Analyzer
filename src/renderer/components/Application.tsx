@@ -6,9 +6,14 @@ import CustomCheckbox from './CustomCheckbox';
 
 const Application = () => {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [fileName, setFileName] = useState('');
 
-  const loadFile = () => {
-    setIsEnabled(!isEnabled);
+  const loadFile = async () => {
+    const loadedFileName = await window.api.loadFile();
+    if (loadedFileName) {
+      setFileName(loadedFileName);
+      setIsEnabled(true);
+    }
   };
 
   return (
@@ -18,6 +23,7 @@ const Application = () => {
         <Button variant="contained" onClick={loadFile}>
           Load File
         </Button>
+        <Typography>{fileName}</Typography>
       </div>
       <div id="right" style={{ flexGrow: 1, padding: '10px 30px' }}>
         <CustomSlider
