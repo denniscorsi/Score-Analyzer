@@ -1,8 +1,28 @@
 import React, { useState } from 'react';
 import { Typography, Box, Slider } from '@mui/material';
 
-const CustomSlider = ({ startingValues, min, max, step, title }) => {
-  const [value, setValue] = useState<number[]>([2022, 2023]);
+interface SliderComponent {
+  startingValues: number[];
+  min: number;
+  max: number;
+  step: number;
+  title: string;
+  allowRange: boolean;
+}
+
+const CustomSlider: React.FC<SliderComponent> = ({
+  startingValues,
+  min,
+  max,
+  step,
+  title,
+  allowRange,
+}) => {
+  let range: number[] = [];
+  if (allowRange) range = [startingValues[0], startingValues[1]];
+  else range = [startingValues[0]];
+
+  const [value, setValue] = useState<number[]>(range);
 
   const handleChange = (_: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
@@ -10,24 +30,24 @@ const CustomSlider = ({ startingValues, min, max, step, title }) => {
 
   const marks = [
     {
-      value: 2020,
-      label: '2020',
+      value: min,
+      label: min,
     },
     {
-      value: 2026,
-      label: '2026',
+      value: max,
+      label: max,
     },
   ];
 
   return (
     <Box>
-      <Typography>Grad Years</Typography>
+      <Typography>{title}</Typography>
       <Slider
         value={value}
         onChange={handleChange}
-        min={2020}
-        max={2026}
-        step={1}
+        min={min}
+        max={max}
+        step={step}
         marks={marks}
         valueLabelDisplay="on"
       />
