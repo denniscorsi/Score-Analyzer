@@ -28,6 +28,8 @@ app.on('ready', () => {
   createWindow();
 });
 
+// app.dock.setIcon(join(__dirname, '../..', 'icons', 'pinnacle-prep-logo.gif'));
+
 ipcMain.handle('load-file', async () => {
   const result = await dialog.showOpenDialog(window!, {
     properties: ['openFile'],
@@ -39,4 +41,8 @@ ipcMain.handle('load-file', async () => {
   if (result.canceled) return null;
   [filePath] = result.filePaths;
   return basename(filePath);
+});
+
+ipcMain.on('run-analysis', (_, parameters) => {
+  console.log(parameters);
 });

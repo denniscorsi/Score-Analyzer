@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Box, Slider } from '@mui/material';
+import { Parameters } from '../../../types';
 
 interface SliderComponent {
   startingValues: number[];
@@ -9,6 +10,9 @@ interface SliderComponent {
   title: string;
   allowRange: boolean;
   isEnabled: boolean;
+  parameters: Parameters;
+  setParameters: (parameters: Parameters) => void;
+  parameterKey: keyof Parameters;
 }
 
 const CustomSlider: React.FC<SliderComponent> = ({
@@ -19,6 +23,9 @@ const CustomSlider: React.FC<SliderComponent> = ({
   title,
   allowRange,
   isEnabled,
+  parameters,
+  setParameters,
+  parameterKey,
 }) => {
   let range: number[] = [];
   if (allowRange) range = [startingValues[0], startingValues[1]];
@@ -28,6 +35,19 @@ const CustomSlider: React.FC<SliderComponent> = ({
 
   const handleChange = (_: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
+    const updatedParameters: Parameters = {
+      ...parameters,
+      years: [...parameters.years],
+      baseline: [...parameters.baseline],
+      sectionBaseline: [...parameters.sectionBaseline],
+    };
+    // console.log(
+    //   'Value of:',
+    //   parameterKey,
+    //   parameters[parameterKey as keyof Parameters]
+    // );
+    updatedParameters[parameterKey] = [2]; // TODO: Figure out this issue
+    setParameters(updatedParameters);
   };
 
   const marks = [

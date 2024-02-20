@@ -7,6 +7,7 @@ declare const MAIN_WINDOW_VITE_NAME: string;
 declare interface Window {
   api: {
     loadFile: () => string | null;
-    runAnalysis: () => void;
+    runAnalysis: (parameters: Parameters) => void;
   };
 }
+
