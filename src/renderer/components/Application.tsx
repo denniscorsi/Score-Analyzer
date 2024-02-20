@@ -1,5 +1,12 @@
 import React, { useState, useReducer } from 'react';
-import { Typography, Button, TextField, FormControlLabel } from '@mui/material';
+import {
+  Typography,
+  Button,
+  TextField,
+  FormControlLabel,
+  Box,
+  LinearProgress,
+} from '@mui/material';
 
 import CustomSlider from './CustomSlider';
 import CustomCheckbox from './CustomCheckbox';
@@ -20,8 +27,9 @@ const defaultParameters: Parameters = {
 const Application = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [fileName, setFileName] = useState('');
-  // const [parameters, setParameters] = useState<Parameters>(defaultParameters);
   const [state, dispatch] = useReducer(reducer, defaultParameters);
+  const [reportReady, setReportReady] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   console.log({ state });
 
@@ -34,7 +42,12 @@ const Application = () => {
   };
 
   const sendParameters = () => {
+    setLoading(true);
     window.api.runAnalysis(state);
+    setTimeout(() => {
+      setReportReady(true);
+      setLoading(false);
+    }, 4000);
   };
 
   return (
@@ -131,10 +144,24 @@ const Application = () => {
           id="runButton"
           variant="contained"
           style={{ display: 'block' }}
-          // disabled={!isEnabled}
+          disabled={!isEnabled}
           onClick={sendParameters}
         >
           Run analysis
+        </Button>
+        {loading && (
+          <Box sx={{ width: '100%' }}>
+            <LinearProgress />
+          </Box>
+        )}
+        <Button
+          id="openReportButton"
+          variant="contained"
+          style={{ display: 'block' }}
+          disabled={!reportReady}
+          onClick={window.api.openReport}
+        >
+          Open Report
         </Button>
       </div>
     </div>

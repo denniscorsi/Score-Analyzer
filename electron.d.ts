@@ -8,6 +8,6 @@ declare interface Window {
   api: {
     loadFile: () => string | null;
     runAnalysis: (parameters: Parameters) => void;
+    openReport: () => void;
   };
 }
-

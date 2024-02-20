@@ -17,6 +17,7 @@ parameters = {
 "name" : sys.argv[11]
 }
 filePath = sys.argv[12]
+savePath = sys.argv[13]
 print("inputs:", parameters, filePath )
 
 students = []
@@ -1017,20 +1018,20 @@ for student in students:
     
 def export():    
     data = Data()
-
+  
 
     try:
-        with open('report.csv') as csvfile:
+        with open(savePath) as csvfile:
             pass
     except:
-        with open('report.csv','w') as csvfile:    
+        with open(savePath,'w') as csvfile:    
             writer = csv.writer(csvfile, delimiter=',')
             writer.writerow(["","","","","","","","","","",'Improvement by test (any test)',"","","","","","","",'Improvement if SATs only',"","","","","","","",'Improvement if ACTs only',"","","","","","","",'Improvement if SAT & ACT',"","","","","","","","Imp. by hours","","","","","","","","","","","","","Started w/Higher Verbal","","","","","Started w/Higher Math","","","","","Started w/Higher Verbal (by at least 50)","","","","","Started w/Higher Math (by at least 50)","","","","","Started w/Higher Verbal (started and ended by at least 50)","","","","","Started w/Higher Math (started and ended by at least 50)","","","","","Percent of students who got x total improvement", "","","","", "Percent of students who got x improvement in any section", "","","Percent of sections with x improvement"])
             writer.writerow(['Title','Students','SAT/ACT Hours','Average Hours/Student','Average Baseline','Average Improvement','Average Verbal Improvement', 'Average Math Improvement','V+M',"", '1 test','2 tests','3 tests','4 tests','5 tests','6 tests','Total',"",'1 test','2 tests','3 tests','4 tests','5 tests','6 tests','Total','','1 test','2 tests','3 tests','4 tests','5 tests','6 tests','Total', '',"1 test", '2 tests','3 tests','4 tests','5 tests','6 tests','Total','','1-19','20-39','40-59','60+','','1-10','11-19','20-29',"30-39","40-49",'50-59','60+','','% Best of V','% Best on M','% better ACT','% better SAT','','% Best of V','% Best on M','% better ACT','% better SAT',"",'% Best of V','% Best on M','% better ACT','% better SAT','','% Best of V','% Best on M','% better ACT','% better SAT',"",'% Best of V','% Best on M','% better ACT','% better SAT','','% Best of V','% Best on M','% better ACT','% better SAT','','100plus','200plus','300plus','400plus',"-","100plus","200plus", "-","100plus","200plus"])
         
             
 
-    with open('report.csv', 'a+') as csvfile:
+    with open(savePath, 'a+') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         row_array = []
         row_array.append(title)

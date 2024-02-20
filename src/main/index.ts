@@ -1,9 +1,12 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
 import { join, basename } from 'path';
 import { exec } from 'child_process';
 
 let window: BrowserWindow | null = null;
 let filePath: string | null = null;
+
+const documentsPath = app.getPath('documents');
+const reportPath = documentsPath + '/report.csv';
 
 const createWindow = () => {
   window = new BrowserWindow({
@@ -44,7 +47,7 @@ ipcMain.handle('load-file', async () => {
   return basename(filePath);
 });
 
-ipcMain.on('run-analysis', (_, parameters) => {
+ipcMain.handle('run-analysis', (_, parameters) => {
   console.log(parameters);
   console.log(filePath);
   let parameterString = '';
@@ -61,7 +64,7 @@ ipcMain.on('run-analysis', (_, parameters) => {
   parameterString += `"${filePath}"`;
 
   exec(
-    `python python/ScoreAnalysis_forElectron.py ${parameterString}`,
+    `python python/ScoreAnalysis_forElectron.py ${parameterString} ${reportPath}`,
     (err, stdout) => {
       if (err) {
         console.log(`output: ${stdout}`);
@@ -71,4 +74,8 @@ ipcMain.on('run-analysis', (_, parameters) => {
       }
     }
   );
+});
+
+ipcMain.on('open-report', () => {
+  shell.openPath(reportPath);
 });
