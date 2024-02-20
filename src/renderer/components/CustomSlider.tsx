@@ -10,9 +10,9 @@ interface SliderComponent {
   title: string;
   allowRange: boolean;
   isEnabled: boolean;
-  parameters: Parameters;
-  setParameters: (parameters: Parameters) => void;
-  parameterKey: keyof Parameters;
+  state: Parameters;
+  dispatch: any;
+  action: string;
 }
 
 const CustomSlider: React.FC<SliderComponent> = ({
@@ -23,9 +23,9 @@ const CustomSlider: React.FC<SliderComponent> = ({
   title,
   allowRange,
   isEnabled,
-  parameters,
-  setParameters,
-  parameterKey,
+  state,
+  dispatch,
+  action,
 }) => {
   let range: number[] = [];
   if (allowRange) range = [startingValues[0], startingValues[1]];
@@ -34,20 +34,9 @@ const CustomSlider: React.FC<SliderComponent> = ({
   const [value, setValue] = useState<number[]>(range);
 
   const handleChange = (_: Event, newValue: number | number[]) => {
-    setValue(newValue as number[]);
-    const updatedParameters: Parameters = {
-      ...parameters,
-      years: [...parameters.years],
-      baseline: [...parameters.baseline],
-      sectionBaseline: [...parameters.sectionBaseline],
-    };
-    // console.log(
-    //   'Value of:',
-    //   parameterKey,
-    //   parameters[parameterKey as keyof Parameters]
-    // );
-    updatedParameters[parameterKey] = [2]; // TODO: Figure out this issue
-    setParameters(updatedParameters);
+    if (typeof newValue === 'number') setValue([newValue]);
+    else setValue(newValue);
+    dispatch({ type: action, payload: newValue });
   };
 
   const marks = [

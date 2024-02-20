@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import { Typography, Button, TextField, FormControlLabel } from '@mui/material';
 
 import CustomSlider from './CustomSlider';
 import CustomCheckbox from './CustomCheckbox';
 import { Parameters } from '../../../types';
+import reducer from '../reducer';
 
 const defaultParameters: Parameters = {
   years: [2022, 2024],
@@ -18,7 +19,8 @@ const defaultParameters: Parameters = {
 const Application = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [fileName, setFileName] = useState('');
-  const [parameters, setParameters] = useState<Parameters>(defaultParameters);
+  // const [parameters, setParameters] = useState<Parameters>(defaultParameters);
+  const [state, dispatch] = useReducer(reducer, defaultParameters);
 
   const loadFile = async () => {
     const loadedFileName = await window.api.loadFile();
@@ -29,7 +31,7 @@ const Application = () => {
   };
 
   const sendParameters = () => {
-    window.api.runAnalysis(parameters);
+    window.api.runAnalysis(state);
   };
 
   return (
@@ -50,9 +52,9 @@ const Application = () => {
           step={1}
           allowRange={true}
           isEnabled={isEnabled}
-          parameters={parameters}
-          setParameters={setParameters}
-          parameterKey="years"
+          state={state}
+          dispatch={dispatch}
+          action="set_years"
         />
         <CustomSlider
           title={'Baseline'}
@@ -62,9 +64,9 @@ const Application = () => {
           step={10}
           allowRange={true}
           isEnabled={isEnabled}
-          parameters={parameters}
-          setParameters={setParameters}
-          parameterKey="baseline"
+          state={state}
+          dispatch={dispatch}
+          action="baseline"
         />
         <CustomSlider
           title={'Section Baseline'}
@@ -74,9 +76,9 @@ const Application = () => {
           step={10}
           allowRange={true}
           isEnabled={isEnabled}
-          parameters={parameters}
-          setParameters={setParameters}
-          parameterKey="sectionBaseline"
+          state={state}
+          dispatch={dispatch}
+          action="sectionBaseline"
         />
         <CustomSlider
           title={'Minimum Tutoring Hours'}
@@ -86,9 +88,9 @@ const Application = () => {
           step={5}
           allowRange={false}
           isEnabled={isEnabled}
-          parameters={parameters}
-          setParameters={setParameters}
-          parameterKey="minTutoringHours"
+          state={state}
+          dispatch={dispatch}
+          action="minTutoringHours"
         />
         <CustomSlider
           title={'Minimum Tests After Baseline'}
@@ -98,23 +100,23 @@ const Application = () => {
           step={1}
           allowRange={false}
           isEnabled={isEnabled}
-          parameters={parameters}
-          setParameters={setParameters}
-          parameterKey="minTests"
+          state={state}
+          dispatch={dispatch}
+          action="minTests"
         />
         <CustomCheckbox
           label={'Exclude students without a baseline'}
           isEnabled={isEnabled}
-          parameters={parameters}
-          setParameters={setParameters}
-          parameterKey="excludeWithoutBaseline"
+          state={state}
+          dispatch={dispatch}
+          action="excludeWithoutBaseline"
         />
         <CustomCheckbox
           label={'Exclude students marked incomplete'}
           isEnabled={isEnabled}
-          parameters={parameters}
-          setParameters={setParameters}
-          parameterKey="excludeIncomplete"
+          state={state}
+          dispatch={dispatch}
+          action="excludeIncomplete"
         />
         <FormControlLabel
           control={<TextField variant="outlined" />}

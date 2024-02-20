@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
+import { Parameters } from '../../../types';
 
 interface CustomCheckboxComponent {
   label: string;
   isEnabled: boolean;
-  parameters: any;
-  setParameters: any;
-  parameterKey: string;
+  state: Parameters;
+  dispatch: any;
+  action: string;
 }
 
 const CustomCheckbox: React.FC<CustomCheckboxComponent> = ({
   label,
   isEnabled,
-  parameters,
-  setParameters,
-  parameterKey
+  state,
+  dispatch,
+  action,
 }) => {
   return (
     <FormControlLabel
