@@ -318,7 +318,6 @@ class Data:
                 count+=1
         self.section_improvement.append("{:.0f}".format((float)(count)/(n*2)*100))           
      
-
 class Test:
 
     def __init__(self, type, date, baseline, verbal, math, composite):
@@ -352,7 +351,6 @@ class Test:
     def setcomposite(self, verbal, math):
         self.composite = int(verbal)+int(math)     
         
-
 class Student:
     
     has_baseline = False
@@ -563,7 +561,6 @@ class Student:
                 return False  
         return True      
         
-
 def student_exists(fname, lname):
     for student in students:
         if lname == student.lname:
@@ -576,9 +573,6 @@ def get_student(fname, lname):
         if lname == student.lname:
             if fname == student.fname:
                 return student   
-
-
-# 
 
 def av_growth_between_x_and_y(students, x, y):
     sum = 0
@@ -607,7 +601,6 @@ def av_growth_if_only_ACT(students):
         return total_growth/num_students     
     else:
         return None 
-    
     
 def av_growth_if_only_SAT(students):
    # print("Students who took only the SAT:")
@@ -713,8 +706,6 @@ def load_student_data():
     for student in students:
         student.order_tests() 
         
-                      
-
 def print_students_without_baselines():
     count_have = 0
     count_missing = 0
@@ -730,7 +721,7 @@ def print_students_without_baselines():
             count_missing+=1
     print("Total baselines: ") + str(count_have)
     print("Total missing baselines: " + str(count_missing))        
-                     
+
 def av_growth_all_students(studentset):
     total_growth = 0
     total_students_growth = 0
@@ -836,17 +827,13 @@ def math_report():
     print("  "+"{:.0f}".format((float)(count_better_ACT)/total*100) + "% did better on the ACT")
     print("  "+"{:.0f}".format((float)(count_better_SAT)/total*100) + "% did better on the SAT")        
                
-                                            
 
 
-
-
-#print(students[138])
 
 def runAnalysis():
 
-  grad_year_min = (int)(input("\nWhat grad year would you like to start your range?"))
-  grad_year_max = (int)(input("\nWhat grad year would you like to end your range?"))
+  grad_year_min = (int)(parameters["year_lower"])
+  grad_year_max = (int)(parameters["year_upper"])
 
   to_remove_years = []
 
@@ -862,7 +849,7 @@ def runAnalysis():
           
 
 
-  hour_minimum = (int)(input("\nWhat is the lower limit of tutoring hours you would like included in this report? "))
+  hour_minimum = (int)(parameters["min_hours"])
 
   to_remove = []
 
@@ -876,7 +863,7 @@ def runAnalysis():
       
       
       
-  baseline_max = (int)(input("\nWhat is the upper limit of baseline score you would like included in this report? "))  
+  baseline_max = (int)(parameters["baseline_upper"])  
 
   to_remove_2 = []
 
@@ -891,10 +878,8 @@ def runAnalysis():
   for student in to_remove_2:
       students.remove(student)  
       
-      
-      
-      
-  baseline_min = (int)(input("\nWhat is the lower limit of baseline score you would like included in this report? "))    
+
+  baseline_min = (int)(parameters["baseline_lower"])    
       
   to_remove_b = []    
 
@@ -905,12 +890,8 @@ def runAnalysis():
           
   for student in to_remove_b:
       students.remove(student)        
-      
-      
-      
-      
-      
-  section_baseline_max = (int)(input("\nWhat is the upper limit of SECTION baseline score you would like included in this report? "))     
+        
+  section_baseline_max = (int)(parameters["section_baseline_upper "])     
       
   to_remove_a = []
 
@@ -927,8 +908,9 @@ def runAnalysis():
   for student in to_remove_a:
       students.remove(student)  
 
-    
-  test_min = (int)(input("\nWhat is the lower limit of number of tests taken (AFTER baseline) you would like included in this report? "))  
+  # TODO: Add section baseline lower
+
+  test_min = (int)(parameters["min_tests"])  
 
   to_remove_3 = []
 
@@ -937,15 +919,14 @@ def runAnalysis():
           print(student.fname, student.lname, len(student.tests))
           to_remove_3.append(student)
           
-      #else:
-        #print("KEPT", student.fname, student.tutoring_hours)    
-        
   for student in to_remove_3:
       students.remove(student)   
       
-          
-      
-  include_no_baseline = input("\nWould you like to include students who DO NOT have a baseline? (y/n) ")
+  if parameters["exclude_without_baseline "] == 'true':
+    include_no_baseline = "n"
+  else:
+    include_no_baseline = "y"  
+
   for student in students:
       student.update_baseline()
 
@@ -965,8 +946,11 @@ def runAnalysis():
       for student in to_remove_4:
           students.remove(student) 
           
-          
-  exclude_incomplete = input("\nWould you like to exclude \"incomplete\" students? (y/n) ")
+  if(parameters["exclude_incomplete "]== 'true'):
+      exclude_incomplete = "y"
+  else:
+      exclude_incomplete = "n"
+
 
   if exclude_incomplete == "y":
 
@@ -987,8 +971,8 @@ def runAnalysis():
           students.remove(student) 
           
           
-  title = input("\nWhat would you like to call this dataset? (e.g. \"2017 all students\" or \"2018-2019 students with baselines and 20+ tutoring hours\") ")             
-          
+  title = parameters["name"] 
+
   #print("REMAINING")        
   #for student in students:
       #print(student.fname)        
@@ -1106,66 +1090,14 @@ def export():
         
         writer.writerow(row_array3)
         
-        
+
 
 # Uncomment below to run 
-# load_student_data()
-# runAnalysis()
-# print("")
-# export()
-# print("")
-# print("DONE...Report can be found in report.csv")
-# print("xoxo Dennis")
+load_student_data()
+runAnalysis()
+print("")
+export()
+print("")
+print("DONE...Report can be found in report.csv")
+print("xoxo Dennis")
 
-
-####START OF REPORT#####
-#===============================================================================
-# print("\n")
-# print("REPORT")
-# print("-----------")
-# print("Number of students studied: "+ str(len(students)))
-# print("Number of students without baselines: "+str(num_without_baseline()))
-# 
-# print("\nAverage total growth: " + str(av_growth_all_students(students)))
-# #print("   (" + str(students_with_only_one_and_no_baseline[0]) + " students not included because they only took one test and had no baseline)")
-# print("\n")
-# 
-# print("Average total growth if took 1 test: " + str(av_total_growth_if_x_tests(students, 1)))
-# print("Average total growth if took 2 tests: " + str(av_total_growth_if_x_tests(students, 2)))
-# print("Average total growth if took 3 tests: " + str(av_total_growth_if_x_tests(students, 3)))
-# print("Average total growth if took 4 tests: " + str(av_total_growth_if_x_tests(students, 4)))
-# print("Average total growth if took 5 tests: " + str(av_total_growth_if_x_tests(students, 5)))
-# print("Average total growth if took 6 tests: " + str(av_total_growth_if_x_tests(students, 6)))
-# #print("  (note, if a student took 3 tests, but had no baseline, he is in the category of having taken 2 tests with the first being considered a baseline)")
-# print("\n")
-# 
-# print("Average growth between baseline and test 1: " + str(av_growth_between_x_and_y(students, 0, 1)))
-# print("Average growth between test 1 and test 2: " + str(av_growth_between_x_and_y(students, 1, 2)))
-# print("Average growth between test 2 and test 3: " + str(av_growth_between_x_and_y(students, 2, 3)))
-# print("Average growth between test 3 and test 4: " + str(av_growth_between_x_and_y(students, 3, 4)))
-# print("Average growth between test 4 and test 5: " + str(av_growth_between_x_and_y(students, 4, 5)))
-# print("Average growth between test 5 and test 6: " + str(av_growth_between_x_and_y(students, 5, 6)))
-# print("\n")
-# 
-# print("Average growth if ACT only: " + str(av_growth_if_only_ACT(students)))
-# print("  (" + str(num_ACT_only) + " students)" )
-# print("Average growth if SAT only: " + str(av_growth_if_only_SAT(students)))
-# print("  (" + str(num_SAT_only) + " students)" )
-# print("Average growth if took both: " + str(av_growth_if_both(students)))
-# print("\n")
-# 
-# print("Average growth for students with 1-20 hours: " + str(av_growth_between_x_and_y_hours(1,20)))
-# print("Average growth for students with 21-40 hours: " + str(av_growth_between_x_and_y_hours(21,40)))
-# print("Average growth for students with 41-60 hours: " + str(av_growth_between_x_and_y_hours(41,60)))    
-# print("Average growth for students with more than 60 hours: " + str(av_growth_between_x_and_y_hours(61,1000)))   
-# 
-# print("\nStudents with a higher verbal baseline:")   
-# verbal_report()      
-# 
-# print("\nStudents with a higher math baseline:")   
-# math_report()    
-#===============================================================================
-
-
-#for student in students:
-    #print(student.lname + ", " + student.fname + " (" + student.gradyear + ")")
