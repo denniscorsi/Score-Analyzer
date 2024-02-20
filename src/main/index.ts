@@ -45,4 +45,5 @@ ipcMain.handle('load-file', async () => {
 
 ipcMain.on('run-analysis', (_, parameters) => {
   console.log(parameters);
+  console.log(filePath);
 });

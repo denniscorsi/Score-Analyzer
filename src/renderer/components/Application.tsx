@@ -14,7 +14,7 @@ const defaultParameters: Parameters = {
   minTests: 1,
   excludeWithoutBaseline: false,
   excludeIncomplete: false,
-  name: 'unnamed',
+  name: null,
 };
 
 const Application = () => {
@@ -128,6 +128,7 @@ const Application = () => {
           disabled={!isEnabled}
         />
         <Button
+          id="runButton"
           variant="contained"
           style={{ display: 'block' }}
           disabled={!isEnabled}

@@ -18,7 +18,7 @@ const CustomCheckbox: React.FC<CustomCheckboxComponent> = ({
     _: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
-    dispatch({ type: action, checked });
+    dispatch({ type: action, payload: checked });
   };
 
   return (
