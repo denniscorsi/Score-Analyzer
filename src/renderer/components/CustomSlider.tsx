@@ -8,6 +8,7 @@ interface SliderComponent {
   step: number;
   title: string;
   allowRange: boolean;
+  isEnabled: boolean;
 }
 
 const CustomSlider: React.FC<SliderComponent> = ({
@@ -17,6 +18,7 @@ const CustomSlider: React.FC<SliderComponent> = ({
   step,
   title,
   allowRange,
+  isEnabled,
 }) => {
   let range: number[] = [];
   if (allowRange) range = [startingValues[0], startingValues[1]];
@@ -50,6 +52,7 @@ const CustomSlider: React.FC<SliderComponent> = ({
         step={step}
         marks={marks}
         valueLabelDisplay="on"
+        disabled={!isEnabled}
       />
     </Box>
   );

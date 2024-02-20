@@ -1,14 +1,23 @@
-import React from 'react';
-import { Typography, Button, Box, Slider } from '@mui/material';
+import React, { useState } from 'react';
+import { Typography, Button, TextField, FormControlLabel } from '@mui/material';
 
 import CustomSlider from './CustomSlider';
+import CustomCheckbox from './CustomCheckbox';
 
 const Application = () => {
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const loadFile = () => {
+    setIsEnabled(!isEnabled);
+  };
+
   return (
     <div style={{ display: 'flex' }}>
       <div id="left" style={{ padding: '10px 20px' }}>
         <Typography variant="h3">Score Analyzer</Typography>
-        <Button variant="contained">Load File</Button>
+        <Button variant="contained" onClick={loadFile}>
+          Load File
+        </Button>
       </div>
       <div id="right" style={{ flexGrow: 1, padding: '10px 30px' }}>
         <CustomSlider
@@ -18,6 +27,7 @@ const Application = () => {
           max={2025}
           step={1}
           allowRange={true}
+          isEnabled={isEnabled}
         />
         <CustomSlider
           title={'Baseline'}
@@ -26,6 +36,7 @@ const Application = () => {
           max={1600}
           step={10}
           allowRange={true}
+          isEnabled={isEnabled}
         />
         <CustomSlider
           title={'Section Baseline'}
@@ -34,6 +45,7 @@ const Application = () => {
           max={800}
           step={10}
           allowRange={true}
+          isEnabled={isEnabled}
         />
         <CustomSlider
           title={'Minimum Tutoring Hours'}
@@ -42,6 +54,7 @@ const Application = () => {
           max={300}
           step={5}
           allowRange={false}
+          isEnabled={isEnabled}
         />
         <CustomSlider
           title={'Minimum Tests After Baseline'}
@@ -50,7 +63,29 @@ const Application = () => {
           max={6}
           step={1}
           allowRange={false}
+          isEnabled={isEnabled}
         />
+        <CustomCheckbox
+          label={'Exclude students without a baseline'}
+          isEnabled={isEnabled}
+        />
+        <CustomCheckbox
+          label={'Exclude students marked incomplete'}
+          isEnabled={isEnabled}
+        />
+        <FormControlLabel
+          control={<TextField variant="outlined" />}
+          label={'Name of analysis'}
+          style={{ display: 'block' }}
+          disabled={!isEnabled}
+        />
+        <Button
+          variant="contained"
+          style={{ display: 'block' }}
+          disabled={!isEnabled}
+        >
+          Run analysis
+        </Button>
       </div>
     </div>
   );
