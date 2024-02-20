@@ -64,6 +64,7 @@ ipcMain.on('run-analysis', (_, parameters) => {
     `python python/ScoreAnalysis_forElectron.py ${parameterString}`,
     (err, stdout) => {
       if (err) {
+        console.log(`output: ${stdout}`);
         console.error(`exec error: ${err}`);
       } else {
         console.log(`output: ${stdout}`);

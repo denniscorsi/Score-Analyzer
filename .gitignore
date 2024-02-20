@@ -6,3 +6,5 @@ node_modules
 
 # Electron-Forge
 out/
+
+report.csv
