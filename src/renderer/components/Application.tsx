@@ -22,6 +22,8 @@ const Application = () => {
   // const [parameters, setParameters] = useState<Parameters>(defaultParameters);
   const [state, dispatch] = useReducer(reducer, defaultParameters);
 
+  console.log({ state });
+
   const loadFile = async () => {
     const loadedFileName = await window.api.loadFile();
     if (loadedFileName) {
@@ -52,7 +54,6 @@ const Application = () => {
           step={1}
           allowRange={true}
           isEnabled={isEnabled}
-          state={state}
           dispatch={dispatch}
           action="set_years"
         />
@@ -64,9 +65,8 @@ const Application = () => {
           step={10}
           allowRange={true}
           isEnabled={isEnabled}
-          state={state}
           dispatch={dispatch}
-          action="baseline"
+          action="set_baseline"
         />
         <CustomSlider
           title={'Section Baseline'}
@@ -76,9 +76,8 @@ const Application = () => {
           step={10}
           allowRange={true}
           isEnabled={isEnabled}
-          state={state}
           dispatch={dispatch}
-          action="sectionBaseline"
+          action="set_section_baseline"
         />
         <CustomSlider
           title={'Minimum Tutoring Hours'}
@@ -88,9 +87,8 @@ const Application = () => {
           step={5}
           allowRange={false}
           isEnabled={isEnabled}
-          state={state}
           dispatch={dispatch}
-          action="minTutoringHours"
+          action="set_min_tutoring_hours"
         />
         <CustomSlider
           title={'Minimum Tests After Baseline'}
@@ -100,23 +98,20 @@ const Application = () => {
           step={1}
           allowRange={false}
           isEnabled={isEnabled}
-          state={state}
           dispatch={dispatch}
-          action="minTests"
+          action="set_min_tests"
         />
         <CustomCheckbox
           label={'Exclude students without a baseline'}
           isEnabled={isEnabled}
-          state={state}
           dispatch={dispatch}
-          action="excludeWithoutBaseline"
+          action="set_exclude_without_baseline"
         />
         <CustomCheckbox
           label={'Exclude students marked incomplete'}
           isEnabled={isEnabled}
-          state={state}
           dispatch={dispatch}
-          action="excludeIncomplete"
+          action="set_exclude_incomplete"
         />
         <FormControlLabel
           control={<TextField variant="outlined" />}

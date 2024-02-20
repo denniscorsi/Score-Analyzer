@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Typography, Box, Slider } from '@mui/material';
-import { Parameters } from '../../../types';
 
 interface SliderComponent {
   startingValues: number[];
@@ -10,7 +9,6 @@ interface SliderComponent {
   title: string;
   allowRange: boolean;
   isEnabled: boolean;
-  state: Parameters;
   dispatch: any;
   action: string;
 }
@@ -23,7 +21,6 @@ const CustomSlider: React.FC<SliderComponent> = ({
   title,
   allowRange,
   isEnabled,
-  state,
   dispatch,
   action,
 }) => {
