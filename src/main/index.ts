@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import { join, basename } from 'path';
+import { exec } from 'child_process';
 
 let window: BrowserWindow | null = null;
 let filePath: string | null = null;
@@ -46,4 +47,27 @@ ipcMain.handle('load-file', async () => {
 ipcMain.on('run-analysis', (_, parameters) => {
   console.log(parameters);
   console.log(filePath);
+  let parameterString = '';
+  parameterString += parameters.years[0] + ' ' + parameters.years[1] + ' ';
+  parameterString +=
+    parameters.baseline[0] + ' ' + parameters.baseline[1] + ' ';
+  parameterString +=
+    parameters.sectionBaseline[0] + ' ' + parameters.sectionBaseline[1] + ' ';
+  parameterString += parameters.minTutoringHours + ' ';
+  parameterString += parameters.minTests + ' ';
+  parameterString += parameters.excludeWithoutBaseline + ' ';
+  parameterString += parameters.excludeIncomplete + ' ';
+  parameterString += `"${parameters.name}"` + ' ';
+  parameterString += `"${filePath}"`;
+
+  exec(
+    `python python/ScoreAnalysis_forElectron.py ${parameterString}`,
+    (err, stdout) => {
+      if (err) {
+        console.error(`exec error: ${err}`);
+      } else {
+        console.log(`output: ${stdout}`);
+      }
+    }
+  );
 });

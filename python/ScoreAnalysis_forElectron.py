@@ -1,8 +1,23 @@
 import csv
 import datetime
-#from tarfile import TUREAD
+import sys
 
-
+arg0 = sys.argv[0]
+parameters = {
+"year_lower": sys.argv[1],
+"year_upper" : sys.argv[2],
+"baseline_lower" : sys.argv[3],
+"baseline_upper" : sys.argv[4],
+"section_baseline_lower" : sys.argv[5],
+"section_baseline_upper ": sys.argv[6],
+"min_hours" : sys.argv[7],
+"min_tests" : sys.argv[8],
+"exclude_without_baseline ": sys.argv[9],
+"exclude_incomplete ": sys.argv[10],
+"name" : sys.argv[11]
+}
+filePath = sys.argv[12]
+print("inputs:", parameters, filePath )
 
 students = []
 student_counts = []

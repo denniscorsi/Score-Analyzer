@@ -131,7 +131,7 @@ const Application = () => {
           id="runButton"
           variant="contained"
           style={{ display: 'block' }}
-          disabled={!isEnabled}
+          // disabled={!isEnabled}
           onClick={sendParameters}
         >
           Run analysis
