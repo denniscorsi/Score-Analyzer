@@ -3,6 +3,7 @@ import datetime
 #from tarfile import TUREAD
 
 
+
 students = []
 student_counts = []
 hours_counts = []
@@ -822,196 +823,196 @@ def math_report():
                
                                             
 
-load_student_data()
+
 
 
 #print(students[138])
 
+def runAnalysis():
+
+  grad_year_min = (int)(input("\nWhat grad year would you like to start your range?"))
+  grad_year_max = (int)(input("\nWhat grad year would you like to end your range?"))
+
+  to_remove_years = []
+
+  for student in students:
+      if student.gradyear < grad_year_min:
+          to_remove_years.append(student)
+      elif student.gradyear > grad_year_max:
+          to_remove_years.append(student)
+          
+  for student in to_remove_years:
+      students.remove(student) 
+      print("REMOVED",student.fname, student.gradyear)
+          
 
 
-grad_year_min = (int)(input("\nWhat grad year would you like to start your range?"))
-grad_year_max = (int)(input("\nWhat grad year would you like to end your range?"))
+  hour_minimum = (int)(input("\nWhat is the lower limit of tutoring hours you would like included in this report? "))
 
-to_remove_years = []
+  to_remove = []
 
-for student in students:
-    if student.gradyear < grad_year_min:
-        to_remove_years.append(student)
-    elif student.gradyear > grad_year_max:
-        to_remove_years.append(student)
+  for student in students:
+      if student.tutoring_hours < hour_minimum:
+          to_remove.append(student) 
         
-for student in to_remove_years:
-    students.remove(student) 
-    print("REMOVED",student.fname, student.gradyear)
-        
-
-
-hour_minimum = (int)(input("\nWhat is the lower limit of tutoring hours you would like included in this report? "))
-
-to_remove = []
-
-for student in students:
-    if student.tutoring_hours < hour_minimum:
-        to_remove.append(student) 
+  for student in to_remove:
+      students.remove(student) 
+      print("REMOVED",student.fname, student.tutoring_hours)
       
-for student in to_remove:
-    students.remove(student) 
-    print("REMOVED",student.fname, student.tutoring_hours)
-     
-    
-    
-baseline_max = (int)(input("\nWhat is the upper limit of baseline score you would like included in this report? "))  
-
-to_remove_2 = []
-
-for student in students:
-    if student.tests[0].composite > baseline_max:
-        print("REMOVED",student.fname, student.tests[0].composite)
-        to_remove_2.append(student)
-        
-    #else:
-       #print("KEPT", student.fname, student.tutoring_hours)    
       
-for student in to_remove_2:
-    students.remove(student)  
-    
-    
-    
-    
-baseline_min = (int)(input("\nWhat is the lower limit of baseline score you would like included in this report? "))    
-    
-to_remove_b = []    
-
-for student in students:
-    if student.tests[0].composite < baseline_min:
-        print("REMOVED",student.fname, student.tests[0].composite)
-        to_remove_b.append(student)
-        
-for student in to_remove_b:
-    students.remove(student)        
-    
-    
-    
-    
-    
-section_baseline_max = (int)(input("\nWhat is the upper limit of SECTION baseline score you would like included in this report? "))     
-    
-to_remove_a = []
-
-for student in students:
-    student.update_baseline()
-    student.order_tests()
-    if student.baseline_score_math > section_baseline_max:
-        print("REMOVED FOR SECTION",student.fname, student.tests[0].math)
-        to_remove_a.append(student)  
-    elif student.baseline_score_verbal > section_baseline_max:
-        print("REMOVED FOR SECTION",student.fname, student.tests[0].verbal)
-        to_remove_a.append(student)  
-
-for student in to_remove_a:
-    students.remove(student)  
-
-   
-test_min = (int)(input("\nWhat is the lower limit of number of tests taken (AFTER baseline) you would like included in this report? "))  
-
-to_remove_3 = []
-
-for student in students:
-    if len(student.tests) -1 < test_min:
-        print(student.fname, student.lname, len(student.tests))
-        to_remove_3.append(student)
-        
-    #else:
-       #print("KEPT", student.fname, student.tutoring_hours)    
       
-for student in to_remove_3:
-    students.remove(student)   
+  baseline_max = (int)(input("\nWhat is the upper limit of baseline score you would like included in this report? "))  
+
+  to_remove_2 = []
+
+  for student in students:
+      if student.tests[0].composite > baseline_max:
+          print("REMOVED",student.fname, student.tests[0].composite)
+          to_remove_2.append(student)
+          
+      #else:
+        #print("KEPT", student.fname, student.tutoring_hours)    
+        
+  for student in to_remove_2:
+      students.remove(student)  
+      
+      
+      
+      
+  baseline_min = (int)(input("\nWhat is the lower limit of baseline score you would like included in this report? "))    
+      
+  to_remove_b = []    
+
+  for student in students:
+      if student.tests[0].composite < baseline_min:
+          print("REMOVED",student.fname, student.tests[0].composite)
+          to_remove_b.append(student)
+          
+  for student in to_remove_b:
+      students.remove(student)        
+      
+      
+      
+      
+      
+  section_baseline_max = (int)(input("\nWhat is the upper limit of SECTION baseline score you would like included in this report? "))     
+      
+  to_remove_a = []
+
+  for student in students:
+      student.update_baseline()
+      student.order_tests()
+      if student.baseline_score_math > section_baseline_max:
+          print("REMOVED FOR SECTION",student.fname, student.tests[0].math)
+          to_remove_a.append(student)  
+      elif student.baseline_score_verbal > section_baseline_max:
+          print("REMOVED FOR SECTION",student.fname, student.tests[0].verbal)
+          to_remove_a.append(student)  
+
+  for student in to_remove_a:
+      students.remove(student)  
+
     
+  test_min = (int)(input("\nWhat is the lower limit of number of tests taken (AFTER baseline) you would like included in this report? "))  
+
+  to_remove_3 = []
+
+  for student in students:
+      if len(student.tests) -1 < test_min:
+          print(student.fname, student.lname, len(student.tests))
+          to_remove_3.append(student)
+          
+      #else:
+        #print("KEPT", student.fname, student.tutoring_hours)    
         
+  for student in to_remove_3:
+      students.remove(student)   
+      
+          
+      
+  include_no_baseline = input("\nWould you like to include students who DO NOT have a baseline? (y/n) ")
+  for student in students:
+      student.update_baseline()
+
+  if include_no_baseline == "n":
+      to_remove_4 = []
+      count = 0
+      
+      for student in students:
+          if student.has_baseline is False:
+              count+=1
+              print("REMOVED",student.fname, student.has_baseline)
+              to_remove_4.append(student)
+              
+          #else:
+            #print("KEPT", student.fname, student.tutoring_hours)    
+      #print("removed " + str(count))     
+      for student in to_remove_4:
+          students.remove(student) 
+          
+          
+  exclude_incomplete = input("\nWould you like to exclude \"incomplete\" students? (y/n) ")
+
+  if exclude_incomplete == "y":
+
+      to_remove_5 = []
+      count = 0
+      
+      for student in students:
+          if student.completion is False:
+              count+=1
+              #print("REMOVED",student.fname, student.has_baseline)
+              to_remove_5.append(student)
+              
+          #else:
+            #print("KEPT", student.fname, student.tutoring_hours)    
+      #print("removed " + str(count))     
+      for student in to_remove_5:
+          print("REMOVED",student.fname)
+          students.remove(student) 
+          
+          
+  title = input("\nWhat would you like to call this dataset? (e.g. \"2017 all students\" or \"2018-2019 students with baselines and 20+ tutoring hours\") ")             
+          
+  #print("REMAINING")        
+  #for student in students:
+      #print(student.fname)        
+          
+  #print_all_students()  
+
+  #print(students[2])
+  #students[-13].order_tests()    
+  #print(students[-13])
+  #print("max math", students[-13].max_score_verbal)
+  #print("math verbal", students[-13].max_score_math)
+  # \print(students[-1])  
+
+  #print_students_without_baselines()
+
+  #SEPARATE OUR STUDENTS#
+  SAT_only_students = []
+  ACT_only_students = []
+  both_tests_students = []
+  for student in students:
+      if student.all_SAT(): #and student.growth() != "Only One Test": 
+          SAT_only_students.append(student) 
+      elif student.all_ACT():
+          ACT_only_students.append(student) 
+      else:
+          both_tests_students.append(student)
+
+  # print("SAT ONLY")
+  # for student in SAT_only_students:
+  #     print(student.lname)
+  #     
+  # print("\nACT ONLY")
+  # for student in ACT_only_students:
+  #     print(student.lname)
+  #     
+  # print("\nBoth")
+  # for student in both_tests_students:
+  #     print(student.lname)
     
-include_no_baseline = input("\nWould you like to include students who DO NOT have a baseline? (y/n) ")
-for student in students:
-    student.update_baseline()
-
-if include_no_baseline == "n":
-    to_remove_4 = []
-    count = 0
-    
-    for student in students:
-        if student.has_baseline is False:
-            count+=1
-            print("REMOVED",student.fname, student.has_baseline)
-            to_remove_4.append(student)
-            
-        #else:
-           #print("KEPT", student.fname, student.tutoring_hours)    
-    #print("removed " + str(count))     
-    for student in to_remove_4:
-        students.remove(student) 
-        
-        
-exclude_incomplete = input("\nWould you like to exclude \"incomplete\" students? (y/n) ")
-
-if exclude_incomplete == "y":
-
-    to_remove_5 = []
-    count = 0
-    
-    for student in students:
-        if student.completion is False:
-            count+=1
-            #print("REMOVED",student.fname, student.has_baseline)
-            to_remove_5.append(student)
-            
-        #else:
-           #print("KEPT", student.fname, student.tutoring_hours)    
-    #print("removed " + str(count))     
-    for student in to_remove_5:
-        print("REMOVED",student.fname)
-        students.remove(student) 
-        
-        
-title = input("\nWhat would you like to call this dataset? (e.g. \"2017 all students\" or \"2018-2019 students with baselines and 20+ tutoring hours\") ")             
-        
-#print("REMAINING")        
-#for student in students:
-    #print(student.fname)        
-        
-#print_all_students()  
-
-#print(students[2])
-#students[-13].order_tests()    
-#print(students[-13])
-#print("max math", students[-13].max_score_verbal)
-#print("math verbal", students[-13].max_score_math)
-# \print(students[-1])  
-
-#print_students_without_baselines()
-
-#SEPARATE OUR STUDENTS#
-SAT_only_students = []
-ACT_only_students = []
-both_tests_students = []
-for student in students:
-    if student.all_SAT(): #and student.growth() != "Only One Test": 
-        SAT_only_students.append(student) 
-    elif student.all_ACT():
-        ACT_only_students.append(student) 
-    else:
-        both_tests_students.append(student)
-
-# print("SAT ONLY")
-# for student in SAT_only_students:
-#     print(student.lname)
-#     
-# print("\nACT ONLY")
-# for student in ACT_only_students:
-#     print(student.lname)
-#     
-# print("\nBoth")
-# for student in both_tests_students:
-#     print(student.lname)
-   
 def export():    
     data = Data()
 
@@ -1092,12 +1093,14 @@ def export():
         
         
 
-
-print("")
-export()
-print("")
-print("DONE...Report can be found in report.csv")
-print("xoxo Dennis")
+# Uncomment below to run 
+# load_student_data()
+# runAnalysis()
+# print("")
+# export()
+# print("")
+# print("DONE...Report can be found in report.csv")
+# print("xoxo Dennis")
 
 
 ####START OF REPORT#####
