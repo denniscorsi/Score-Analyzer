@@ -6,4 +6,5 @@ export interface Parameters {
   minTests: number;
   excludeWithoutBaseline: boolean;
   excludeIncomplete: boolean;
+  name: string;
 }

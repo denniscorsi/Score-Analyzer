@@ -12,8 +12,9 @@ const defaultParameters: Parameters = {
   sectionBaseline: [500, 700],
   minTutoringHours: 20,
   minTests: 1,
-  excludeWithoutBaseline: true,
-  excludeIncomplete: true,
+  excludeWithoutBaseline: false,
+  excludeIncomplete: false,
+  name: 'unnamed',
 };
 
 const Application = () => {
@@ -114,7 +115,14 @@ const Application = () => {
           action="set_exclude_incomplete"
         />
         <FormControlLabel
-          control={<TextField variant="outlined" />}
+          control={
+            <TextField
+              variant="outlined"
+              onChange={(event) =>
+                dispatch({ type: 'set_name', payload: event.target.value })
+              }
+            />
+          }
           label={'Name of analysis'}
           style={{ display: 'block' }}
           disabled={!isEnabled}

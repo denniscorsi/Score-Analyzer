@@ -67,6 +67,15 @@ const reducer = (state: Parameters, action: Action) => {
         sectionBaseline: [...state.sectionBaseline],
         excludeIncomplete: action.payload,
       };
+    case 'set_name':
+      console.log('setting name');
+      return {
+        ...state,
+        years: [...state.years],
+        baseline: [...state.baseline],
+        sectionBaseline: [...state.sectionBaseline],
+        name: action.payload,
+      };
     default:
       return state;
   }
