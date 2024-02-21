@@ -903,16 +903,32 @@ for student in students:
     student.update_baseline()
     student.order_tests()
     if student.baseline_score_math > section_baseline_max:
-        print("REMOVED FOR SECTION",student.fname, student.tests[0].math)
+        print("REMOVED FOR SECTION MAX",student.fname, student.tests[0].math)
         to_remove_a.append(student)  
     elif student.baseline_score_verbal > section_baseline_max:
-        print("REMOVED FOR SECTION",student.fname, student.tests[0].verbal)
+        print("REMOVED FOR SECTION MAX",student.fname, student.tests[0].verbal)
         to_remove_a.append(student)  
 
 for student in to_remove_a:
     students.remove(student)  
 
 # TODO: Add section baseline lower
+
+section_baseline_min = int(parameters["section_baseline_lower"])
+
+to_remove_c = []
+
+for student in students:
+    if student.baseline_score_math < section_baseline_min:
+        print("REMOVED FOR SECTION MIN",student.fname, student.tests[0].math)
+        to_remove_c.append(student)  
+    elif student.baseline_score_verbal > section_baseline_min:
+        print("REMOVED FOR SECTION MIN",student.fname, student.tests[0].verbal)
+        to_remove_c.append(student)  
+
+for student in to_remove_c:
+    students.remove(student)  
+    
 
 test_min = int(parameters["min_tests"])  
 

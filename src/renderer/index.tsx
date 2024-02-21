@@ -22,15 +22,15 @@ const theme = createTheme({
       main: '#00843A', // green
     },
     text: {
-      primary: '#00843A', // red
-      secondary: '#00843A', // orange
+      primary: '#00843A', // green
+      secondary: '#00843A', // green
       // disabled: '#800080', // purple
     },
   },
-  typography: {
-    // fontFamily: 'Arial, sans-serif',
-    fontSize: 14,
-  },
+  // typography: {
+  //   fontFamily: 'Arial, sans-serif',
+  //   fontSize: 14,
+  // },
 });
 
 const root = ReactDOM.createRoot(
@@ -38,6 +38,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <ThemeProvider theme={theme}>
-    <App />{' '}
+    <App />
   </ThemeProvider>
 );

@@ -8,7 +8,6 @@ interface Action {
 const reducer = (state: Parameters, action: Action) => {
   switch (action.type) {
     case 'set_years':
-      console.log('setting years');
       return {
         ...state,
         years: action.payload,
@@ -16,7 +15,6 @@ const reducer = (state: Parameters, action: Action) => {
         sectionBaseline: [...state.sectionBaseline],
       };
     case 'set_baseline':
-      console.log('setting baseline');
       return {
         ...state,
         years: [...state.years],
@@ -24,7 +22,6 @@ const reducer = (state: Parameters, action: Action) => {
         sectionBaseline: [...state.sectionBaseline],
       };
     case 'set_section_baseline':
-      console.log('setting section baseline');
       return {
         ...state,
         years: [...state.years],
@@ -32,7 +29,6 @@ const reducer = (state: Parameters, action: Action) => {
         sectionBaseline: action.payload,
       };
     case 'set_min_tutoring_hours':
-      console.log('setting min tutoring hours');
       return {
         ...state,
         years: [...state.years],
@@ -41,7 +37,6 @@ const reducer = (state: Parameters, action: Action) => {
         minTutoringHours: action.payload[0],
       };
     case 'set_min_tests':
-      console.log('setting min tests');
       return {
         ...state,
         years: [...state.years],
@@ -50,7 +45,6 @@ const reducer = (state: Parameters, action: Action) => {
         minTests: action.payload[0],
       };
     case 'set_exclude_without_baseline':
-      console.log('setting exclude without baseline');
       return {
         ...state,
         years: [...state.years],
@@ -59,7 +53,6 @@ const reducer = (state: Parameters, action: Action) => {
         excludeWithoutBaseline: action.payload,
       };
     case 'set_exclude_incomplete':
-      console.log('setting exclude incomplete');
       return {
         ...state,
         years: [...state.years],
@@ -68,7 +61,6 @@ const reducer = (state: Parameters, action: Action) => {
         excludeIncomplete: action.payload,
       };
     case 'set_name':
-      console.log('setting name');
       return {
         ...state,
         years: [...state.years],
