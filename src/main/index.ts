@@ -11,7 +11,7 @@ const reportPath = documentsPath + '/report.csv';
 const createWindow = () => {
   window = new BrowserWindow({
     width: 1300,
-    height: 900,
+    height: 800,
     minHeight: 780,
     minWidth: 1000,
     webPreferences: {

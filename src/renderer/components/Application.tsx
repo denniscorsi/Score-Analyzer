@@ -15,10 +15,10 @@ import { Parameters } from '../../../types';
 import reducer from '../reducer';
 
 const defaultParameters: Parameters = {
-  years: [2022, 2024],
-  baseline: [1200, 1500],
-  sectionBaseline: [500, 700],
-  minTutoringHours: 20,
+  years: [2020, 2026],
+  baseline: [0, 1600],
+  sectionBaseline: [0, 800],
+  minTutoringHours: 0,
   minTests: 1,
   excludeWithoutBaseline: false,
   excludeIncomplete: false,
@@ -27,6 +27,7 @@ const defaultParameters: Parameters = {
 
 const Application = () => {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [hasName, setHasName] = useState(false);
   const [fileName, setFileName] = useState('');
   const [state, dispatch] = useReducer(reducer, defaultParameters);
   const [reportReady, setReportReady] = useState(false);
@@ -55,6 +56,7 @@ const Application = () => {
 
   return (
     <div
+      id="outer-container"
       style={{
         display: 'flex',
         height: '97vh',
@@ -63,6 +65,7 @@ const Application = () => {
       }}
     >
       <div
+        id="border"
         style={{
           display: 'flex',
           border: '15px solid #00843A',
@@ -82,18 +85,25 @@ const Application = () => {
         >
           <div>
             <Typography variant="h3">Score Analyzer</Typography>
-            <Button variant="contained" color="secondary" onClick={loadFile}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={loadFile}
+              style={{
+                margin: '15px 0px',
+              }}
+            >
               Load File
             </Button>
             <Typography>{fileName}</Typography>
           </div>
-          <div>
+          <Box marginBottom={10}>
             <Button
               id="runButton"
               variant="contained"
               color="secondary"
-              style={{ display: 'block' }}
-              disabled={!isEnabled}
+              style={{ display: 'block', margin: '20px 0px' }}
+              disabled={!hasName}
               onClick={sendParameters}
             >
               Run analysis
@@ -112,14 +122,14 @@ const Application = () => {
             >
               Open Report
             </Button>
-          </div>
+          </Box>
         </div>
         <div id="right" style={{ flexGrow: 1, padding: '20px 50px' }}>
           <CustomSlider
             title={'Grad Years'}
-            startingValues={[2022, 2023]}
+            startingValues={[2020, 2026]}
             min={2020}
-            max={2025}
+            max={2026}
             step={1}
             allowRange={true}
             isEnabled={isEnabled}
@@ -152,7 +162,7 @@ const Application = () => {
             title={'Minimum Tutoring Hours'}
             startingValues={[0]}
             min={0}
-            max={300}
+            max={200}
             step={5}
             allowRange={false}
             isEnabled={isEnabled}
@@ -182,21 +192,25 @@ const Application = () => {
             dispatch={dispatch}
             action="set_exclude_incomplete"
           />
-          <FormControlLabel
-            control={
-              <TextField
-                variant="outlined"
-                onChange={(event) =>
-                  dispatch({ type: 'set_name', payload: event.target.value })
-                }
-              />
-            }
-            label={'Name of analysis'}
-            style={{ display: 'block' }}
+
+          <TextField
             disabled={!isEnabled}
+            variant="outlined"
+            label="Name of analysis"
+            sx={{
+              width: '400px',
+              marginRight: '20px',
+              marginTop: '15px',
+            }}
+            onChange={(event) => {
+              dispatch({ type: 'set_name', payload: event.target.value });
+              if (event.target.value) setHasName(true);
+              else setHasName(false);
+            }}
           />
         </div>
         <div
+          id="logo"
           style={{
             position: 'absolute',
             bottom: '60px',
