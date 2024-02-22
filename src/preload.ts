@@ -6,8 +6,11 @@ const api = {
     const fileName = await ipcRenderer.invoke('load-file');
     return fileName;
   },
-  runAnalysis: (parameters: Parameters) => {
-    ipcRenderer.send('run-analysis', parameters);
+  runAnalysis: async (parameters: Parameters) => {
+    return ipcRenderer.invoke('run-analysis', parameters);
+  },
+  openReport: () => {
+    ipcRenderer.send('open-report');
   },
 };
 

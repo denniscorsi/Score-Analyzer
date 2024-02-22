@@ -48,7 +48,7 @@ const CustomSlider: React.FC<SliderComponent> = ({
   ];
 
   return (
-    <Box>
+    <Box paddingY={0.5}>
       <Typography>{title}</Typography>
       <Slider
         value={value}
@@ -57,7 +57,7 @@ const CustomSlider: React.FC<SliderComponent> = ({
         max={max}
         step={step}
         marks={marks}
-        valueLabelDisplay="on"
+        valueLabelDisplay="auto"
         disabled={!isEnabled}
       />
     </Box>

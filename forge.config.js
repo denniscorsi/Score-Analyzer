@@ -1,5 +1,12 @@
+/* eslint-disable comma-dangle */
 module.exports = {
-  packagerConfig: {},
+  packagerConfig: {
+    icon: './icons/icon',
+    osx: {
+      targets: ['zip', 'dmg'],
+      arch: ['x64', 'arm64'],
+    },
+  },
   rebuildConfig: {},
   makers: [
     {
@@ -12,7 +19,11 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          icon: './icons/icon',
+        },
+      },
     },
     {
       name: '@electron-forge/maker-rpm',

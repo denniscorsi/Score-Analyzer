@@ -1,14 +1,39 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
 import { join, basename } from 'path';
+import fs from 'fs';
 import { exec } from 'child_process';
+import { PythonShell } from 'python-shell';
+import fixPath from 'fix-path';
 
 let window: BrowserWindow | null = null;
 let filePath: string | null = null;
 
+const appPath = app.getAppPath();
+const documentsPath = app.getPath('documents');
+const reportPath = documentsPath + '/report.csv';
+const logFilePath = join(app.getPath('userData'), 'app.log');
+const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+
+console.log = function (message) {
+  if (typeof message === 'object')
+    logStream.write(`${JSON.stringify(message)}\n`);
+  else logStream.write(`${message}\n`);
+};
+
+console.error = function (message) {
+  logStream.write('ERROR\n');
+  if (typeof message === 'object')
+    logStream.write(`${JSON.stringify(message)}\n`);
+  else logStream.write(`${message}\n`);
+};
+
 const createWindow = () => {
   window = new BrowserWindow({
     width: 1300,
-    height: 1000,
+    height: 800,
+    minHeight: 780,
+    minWidth: 1000,
+    icon: join(__dirname, 'icons/icon.icns'),
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
     },
@@ -21,6 +46,19 @@ const createWindow = () => {
       join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
     );
   }
+
+  console.log('App Path:' + appPath);
+
+  console.log('Path:' + process.env.PATH);
+  console.log('About to run fixPath');
+  fixPath();
+  // process.env.PATH = '/usr/sbin';
+  console.log('Path:' + process.env.PATH);
+
+  // Testing python Shell
+  PythonShell.run(`${appPath}/python/test.py`).then((messages) => {
+    console.log(messages);
+  });
 
   return window;
 };
@@ -44,7 +82,7 @@ ipcMain.handle('load-file', async () => {
   return basename(filePath);
 });
 
-ipcMain.on('run-analysis', (_, parameters) => {
+ipcMain.handle('run-analysis', (_, parameters) => {
   console.log(parameters);
   console.log(filePath);
   let parameterString = '';
@@ -61,7 +99,7 @@ ipcMain.on('run-analysis', (_, parameters) => {
   parameterString += `"${filePath}"`;
 
   exec(
-    `python python/ScoreAnalysis_forElectron.py ${parameterString}`,
+    `python "${appPath}/python/ScoreAnalysis_forElectron.py" ${parameterString} ${reportPath}`,
     (err, stdout) => {
       if (err) {
         console.log(`output: ${stdout}`);
@@ -71,4 +109,8 @@ ipcMain.on('run-analysis', (_, parameters) => {
       }
     }
   );
+});
+
+ipcMain.on('open-report', () => {
+  shell.openPath(reportPath);
 });
