@@ -3,7 +3,6 @@ import {
   Typography,
   Button,
   TextField,
-  FormControlLabel,
   Box,
   LinearProgress,
 } from '@mui/material';
@@ -217,12 +216,12 @@ const Application = () => {
             right: '35px',
           }}
         >
-          <img
-            src="icons/pinnacle-prep-logo.gif"
+          {/* <img
+            src="src/renderer/assetts/pinnacle-prep-logo.gif"
             style={{
               width: '150px',
             }}
-          />
+          /> */}
         </div>
       </div>
     </div>

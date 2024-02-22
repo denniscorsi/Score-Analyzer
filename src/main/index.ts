@@ -1,12 +1,31 @@
 import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
 import { join, basename } from 'path';
+import fs from 'fs';
 import { exec } from 'child_process';
+import { PythonShell } from 'python-shell';
+import fixPath from 'fix-path';
 
 let window: BrowserWindow | null = null;
 let filePath: string | null = null;
 
+const appPath = app.getAppPath();
 const documentsPath = app.getPath('documents');
 const reportPath = documentsPath + '/report.csv';
+const logFilePath = join(app.getPath('userData'), 'app.log');
+const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+
+console.log = function (message) {
+  if (typeof message === 'object')
+    logStream.write(`${JSON.stringify(message)}\n`);
+  else logStream.write(`${message}\n`);
+};
+
+console.error = function (message) {
+  logStream.write('ERROR\n');
+  if (typeof message === 'object')
+    logStream.write(`${JSON.stringify(message)}\n`);
+  else logStream.write(`${message}\n`);
+};
 
 const createWindow = () => {
   window = new BrowserWindow({
@@ -27,6 +46,19 @@ const createWindow = () => {
       join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
     );
   }
+
+  console.log('App Path:' + appPath);
+
+  console.log('Path:' + process.env.PATH);
+  console.log('About to run fixPath');
+  fixPath();
+  // process.env.PATH = '/usr/sbin';
+  console.log('Path:' + process.env.PATH);
+
+  // Testing python Shell
+  PythonShell.run(`${appPath}/python/test.py`).then((messages) => {
+    console.log(messages);
+  });
 
   return window;
 };
@@ -67,7 +99,7 @@ ipcMain.handle('run-analysis', (_, parameters) => {
   parameterString += `"${filePath}"`;
 
   exec(
-    `python python/ScoreAnalysis_forElectron.py ${parameterString} ${reportPath}`,
+    `python "${appPath}/python/ScoreAnalysis_forElectron.py" ${parameterString} ${reportPath}`,
     (err, stdout) => {
       if (err) {
         console.log(`output: ${stdout}`);
