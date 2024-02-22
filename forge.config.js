@@ -1,6 +1,10 @@
 module.exports = {
   packagerConfig: {
     icon: './icons/icon',
+    osx: {
+      targets: ['zip', 'dmg'],
+      arch: ['x64', 'arm64'],
+    },
   },
   rebuildConfig: {},
   makers: [
