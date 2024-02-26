@@ -83,7 +83,7 @@ const Application = () => {
           }}
         >
           <div>
-            <Typography variant="h3">Score Analyzer AUTO-update!!</Typography>
+            <Typography variant="h3">Score Analyzer</Typography>
             <Button
               variant="contained"
               color="secondary"
