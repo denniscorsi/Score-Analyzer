@@ -3,6 +3,10 @@
   "productName": "Pinnacle Prep | Score Analyzer",
   "version": "1.0.0",
   "description": "Run score analysis",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/denniscorsi/Score-Analyzer.git"
+  },
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -47,12 +51,19 @@
     "remark-gfm": "^3.0.1",
     "remark-parse": "^10.0.2",
     "remark-rehype": "^10.1.0",
-    "unified": "^11.0.1"
+    "unified": "^11.0.1",
+    "update-electron-app": "^3.0.0"
   },
-"packagerConfig": {
-  "osx": {
-    "targets": ["zip", "dmg"],
-    "arch": ["x64", "arm64"]
+  "packagerConfig": {
+    "osx": {
+      "targets": [
+        "zip",
+        "dmg"
+      ],
+      "arch": [
+        "x64",
+        "arm64"
+      ]
+    }
   }
-}
 }
