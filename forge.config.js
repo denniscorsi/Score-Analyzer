@@ -30,6 +30,18 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'denniscorsi',
+          name: 'Score-Analyzer',
+        },
+        prerelease: true,
+      },
+    },
+  ],
   plugins: [
     {
       name: '@electron-forge/plugin-vite',
