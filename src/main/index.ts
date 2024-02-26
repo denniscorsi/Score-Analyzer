@@ -4,6 +4,8 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import { PythonShell } from 'python-shell';
 import fixPath from 'fix-path';
+const updater = require('update-electron-app');
+updater.updateElectronApp();
 
 let window: BrowserWindow | null = null;
 let filePath: string | null = null;
