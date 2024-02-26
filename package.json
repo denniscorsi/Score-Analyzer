@@ -1,7 +1,7 @@
 {
   "name": "pinnacle-prep-analyzer",
   "productName": "Pinnacle Prep | Score Analyzer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Run score analysis",
   "repository": {
     "type": "git",
