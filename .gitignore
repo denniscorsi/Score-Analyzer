@@ -10,3 +10,5 @@ out/
 report.csv
 
 dist/
+
+.env
