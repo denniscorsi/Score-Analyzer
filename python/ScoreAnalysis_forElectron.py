@@ -395,17 +395,20 @@ class Student:
     def __repr__(self):
         self.update_baseline()
         self.update_max()
-        student_info = "STUDENT\n" + self.lname + "," + self.fname + "\nGrad year: " + self.gradyear + "\nTutoring Hours: " + str(self.tutoring_hours) + "\n"
+        student_info = "\n\n" + self.lname + "," + self.fname + "\nGrad year: " + str(self.gradyear) + "\nTutoring Hours: " + str(self.tutoring_hours) + "\n"
         for test in self.tests:
             if test.baseline:
-                student_info += "Baseline..." 
+                student_info += "Baseline\t\t" 
             else:
-                student_info += "Test......."
-            student_info = student_info + test.type + ".....V: " + str(test.verbal) + " M:" + str(test.math) + " Comp: " + str(test.composite) + "\n"
+                student_info += "Test\t\t\t"
+            student_info = student_info + test.type
+            if test.type == 'SAT ' or test.type == "ACT ":
+                student_info = student_info + '\t'
+            student_info = student_info + "\tV:" + str(test.verbal) + "  M:" + str(test.math) + "  Comp:" + str(test.composite) + "\n"
         student_info = student_info + "Growth: " + str(self.growth())
         student_info = student_info + "\nNumber of non-baseline tests: " + str(self.num_tests)
-        student_info = student_info + "Verbal growth: " + str(self.verbal_growth())
-        student_info = student_info + "Math growth: " + str(self.math_growth())
+        student_info = student_info + "\nVerbal growth: " + str(self.verbal_growth())
+        student_info = student_info + "\nMath growth: " + str(self.math_growth())
         student_info = student_info + "\nBest test type: "
         if self.better_test_ACT:
             student_info = student_info + "ACT"
@@ -413,6 +416,8 @@ class Student:
             student_info = student_info + "SAT"
         else:  
             student_info = student_info + "neither"  
+
+        student_info += '\n'
         return student_info
        
     def add_test(self, test): 
@@ -1121,3 +1126,4 @@ print("")
 print("DONE...Report can be found in report.csv")
 print("xoxo Dennis")
 
+print(students)
