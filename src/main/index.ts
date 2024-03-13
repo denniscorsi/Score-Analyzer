@@ -57,11 +57,6 @@ const createWindow = () => {
   // process.env.PATH = '/usr/sbin';
   console.log('Path:' + process.env.PATH);
 
-  // Testing python Shell
-  PythonShell.run(`${appPath}/python/test.py`).then((messages) => {
-    console.log(messages);
-  });
-
   return window;
 };
 
