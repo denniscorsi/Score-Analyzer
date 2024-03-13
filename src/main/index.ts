@@ -101,7 +101,7 @@ ipcMain.handle('run-analysis', (_, parameters) => {
   parameterString += `"${filePath}"`;
 
   exec(
-    `python "${appPath}/python/ScoreAnalysis_forElectron.py" ${parameterString} ${reportPath}`,
+    `python "${appPath}/python/ScoreAnalysis_forElectron.py" ${parameterString} ${documentsPath}`,
     (err, stdout) => {
       if (err) {
         console.log(`output: ${stdout}`);
@@ -115,4 +115,19 @@ ipcMain.handle('run-analysis', (_, parameters) => {
 
 ipcMain.on('open-report', () => {
   shell.openPath(reportPath);
+});
+
+ipcMain.on('open-students', () => {
+  shell.openPath(documentsPath + '/slice.txt');
+});
+
+ipcMain.on('clear-report', () => {
+  fs.unlink(reportPath, (err) => {
+    if (err) {
+      console.error('Error deleting file:', err);
+      return;
+    }
+
+    console.log('File deleted successfully');
+  });
 });

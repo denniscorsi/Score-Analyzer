@@ -12,6 +12,7 @@ import CustomSlider from './CustomSlider';
 import CustomCheckbox from './CustomCheckbox';
 import { Parameters } from '../../../types';
 import reducer from '../reducer';
+import Settings from './Settings';
 
 const defaultParameters: Parameters = {
   years: [2020, 2026],
@@ -31,6 +32,7 @@ const Application = () => {
   const [state, dispatch] = useReducer(reducer, defaultParameters);
   const [reportReady, setReportReady] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useTheme();
 
@@ -120,6 +122,16 @@ const Application = () => {
               onClick={window.api.openReport}
             >
               Open Report
+            </Button>
+            <Button
+              sx={{ marginTop: '20px' }}
+              id="openStudentButton"
+              variant="contained"
+              style={{ display: 'block' }}
+              disabled={!reportReady}
+              onClick={window.api.openStudents}
+            >
+              Open Student Slice
             </Button>
           </Box>
         </div>
@@ -222,8 +234,10 @@ const Application = () => {
               width: '150px',
             }}
           /> */}
+          <Button onClick={() => setOpen(true)}>Settings</Button>
         </div>
       </div>
+      <Settings open={open} setOpen={setOpen} />
     </div>
   );
 };
