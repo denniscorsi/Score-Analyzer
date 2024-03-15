@@ -12,6 +12,12 @@ const api = {
   openReport: () => {
     ipcRenderer.send('open-report');
   },
+  openStudents: () => {
+    ipcRenderer.send('open-students');
+  },
+  clearReport: () => {
+    ipcRenderer.send('clear-report');
+  },
 };
 
 contextBridge.exposeInMainWorld('api', api);

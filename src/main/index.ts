@@ -4,8 +4,8 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import { PythonShell } from 'python-shell';
 import fixPath from 'fix-path';
-const updater = require('update-electron-app');
-updater.updateElectronApp();
+const { updateElectronApp } = require('update-electron-app');
+updateElectronApp();
 
 let window: BrowserWindow | null = null;
 let filePath: string | null = null;
@@ -57,11 +57,6 @@ const createWindow = () => {
   // process.env.PATH = '/usr/sbin';
   console.log('Path:' + process.env.PATH);
 
-  // Testing python Shell
-  PythonShell.run(`${appPath}/python/test.py`).then((messages) => {
-    console.log(messages);
-  });
-
   return window;
 };
 
@@ -101,7 +96,7 @@ ipcMain.handle('run-analysis', (_, parameters) => {
   parameterString += `"${filePath}"`;
 
   exec(
-    `python "${appPath}/python/ScoreAnalysis_forElectron.py" ${parameterString} ${reportPath}`,
+    `python "${appPath}/python/ScoreAnalysis_forElectron.py" ${parameterString} ${documentsPath}`,
     (err, stdout) => {
       if (err) {
         console.log(`output: ${stdout}`);
@@ -115,4 +110,19 @@ ipcMain.handle('run-analysis', (_, parameters) => {
 
 ipcMain.on('open-report', () => {
   shell.openPath(reportPath);
+});
+
+ipcMain.on('open-students', () => {
+  shell.openPath(documentsPath + '/slice.txt');
+});
+
+ipcMain.on('clear-report', () => {
+  fs.unlink(reportPath, (err) => {
+    if (err) {
+      console.error('Error deleting file:', err);
+      return;
+    }
+
+    console.log('File deleted successfully');
+  });
 });

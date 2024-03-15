@@ -9,5 +9,7 @@ declare interface Window {
     loadFile: () => string | null;
     runAnalysis: (parameters: Parameters) => void;
     openReport: () => void;
+    openStudents: () => void;
+    clearReport: () => void;
   };
 }

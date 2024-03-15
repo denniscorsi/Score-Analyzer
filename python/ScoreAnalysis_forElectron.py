@@ -17,7 +17,8 @@ parameters = {
 "name" : sys.argv[11]
 }
 filePath = sys.argv[12]
-savePath = sys.argv[13]
+saveDir = sys.argv[13]
+saveReportPath = saveDir + '/report.csv';
 print("inputs:", parameters, filePath )
 
 students = []
@@ -395,17 +396,20 @@ class Student:
     def __repr__(self):
         self.update_baseline()
         self.update_max()
-        student_info = "STUDENT\n" + self.lname + "," + self.fname + "\nGrad year: " + self.gradyear + "\nTutoring Hours: " + str(self.tutoring_hours) + "\n"
+        student_info = "\n\n" + self.lname + "," + self.fname + "\nGrad year: " + str(self.gradyear) + "\nTutoring Hours: " + str(self.tutoring_hours) + "\n"
         for test in self.tests:
             if test.baseline:
-                student_info += "Baseline..." 
+                student_info += "Baseline\t" 
             else:
-                student_info += "Test......."
-            student_info = student_info + test.type + ".....V: " + str(test.verbal) + " M:" + str(test.math) + " Comp: " + str(test.composite) + "\n"
+                student_info += "Test\t\t"
+            student_info = student_info + test.type
+            # if test.type == 'SAT ' or test.type == "ACT ":
+            #     student_info = student_info + '\t'
+            student_info = student_info + "\tV:" + str(test.verbal) + "  M:" + str(test.math) + "  Comp:" + str(test.composite) + "\n"
         student_info = student_info + "Growth: " + str(self.growth())
         student_info = student_info + "\nNumber of non-baseline tests: " + str(self.num_tests)
-        student_info = student_info + "Verbal growth: " + str(self.verbal_growth())
-        student_info = student_info + "Math growth: " + str(self.math_growth())
+        student_info = student_info + "\nVerbal growth: " + str(self.verbal_growth())
+        student_info = student_info + "\nMath growth: " + str(self.math_growth())
         student_info = student_info + "\nBest test type: "
         if self.better_test_ACT:
             student_info = student_info + "ACT"
@@ -413,6 +417,8 @@ class Student:
             student_info = student_info + "SAT"
         else:  
             student_info = student_info + "neither"  
+
+        student_info += '\n'
         return student_info
        
     def add_test(self, test): 
@@ -1037,17 +1043,17 @@ def export():
   
 
     try:
-        with open(savePath) as csvfile:
+        with open(saveReportPath) as csvfile:
             pass
     except:
-        with open(savePath,'w') as csvfile:    
+        with open(saveReportPath,'w') as csvfile:    
             writer = csv.writer(csvfile, delimiter=',')
             writer.writerow(["","","","","","","","","","",'Improvement by test (any test)',"","","","","","","",'Improvement if SATs only',"","","","","","","",'Improvement if ACTs only',"","","","","","","",'Improvement if SAT & ACT',"","","","","","","","Imp. by hours","","","","","","","","","","","","","Started w/Higher Verbal","","","","","Started w/Higher Math","","","","","Started w/Higher Verbal (by at least 50)","","","","","Started w/Higher Math (by at least 50)","","","","","Started w/Higher Verbal (started and ended by at least 50)","","","","","Started w/Higher Math (started and ended by at least 50)","","","","","Percent of students who got x total improvement", "","","","", "Percent of students who got x improvement in any section", "","","Percent of sections with x improvement"])
             writer.writerow(['Title','Students','SAT/ACT Hours','Average Hours/Student','Average Baseline','Average Improvement','Average Verbal Improvement', 'Average Math Improvement','V+M',"", '1 test','2 tests','3 tests','4 tests','5 tests','6 tests','Total',"",'1 test','2 tests','3 tests','4 tests','5 tests','6 tests','Total','','1 test','2 tests','3 tests','4 tests','5 tests','6 tests','Total', '',"1 test", '2 tests','3 tests','4 tests','5 tests','6 tests','Total','','1-19','20-39','40-59','60+','','1-10','11-19','20-29',"30-39","40-49",'50-59','60+','','% Best of V','% Best on M','% better ACT','% better SAT','','% Best of V','% Best on M','% better ACT','% better SAT',"",'% Best of V','% Best on M','% better ACT','% better SAT','','% Best of V','% Best on M','% better ACT','% better SAT',"",'% Best of V','% Best on M','% better ACT','% better SAT','','% Best of V','% Best on M','% better ACT','% better SAT','','100plus','200plus','300plus','400plus',"-","100plus","200plus", "-","100plus","200plus"])
         
             
 
-    with open(savePath, 'a+') as csvfile:
+    with open(saveReportPath, 'a+') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         row_array = []
         row_array.append(title)
@@ -1121,3 +1127,9 @@ print("")
 print("DONE...Report can be found in report.csv")
 print("xoxo Dennis")
 
+# print student slice to a file
+print(students)
+with open(saveDir + '/slice.txt','w') as student_file:
+    student_file.write(parameters["name"])
+    for student in students:
+      student_file.write(str(student))
