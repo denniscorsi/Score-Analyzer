@@ -374,7 +374,7 @@ class Student:
     max_score_SAT_verbal = 0
     max_score_SAT_math = 0
     
-    num_tests = 0   #DOES NOT INCLUDE BASELINE
+    num_tests = 0   # DOES NOT INCLUDE BASELINE NOR PSAT
     better_test_SAT = False
     better_test_ACT = False
     
@@ -423,7 +423,7 @@ class Student:
        
     def add_test(self, test): 
         self.tests.append(test)  
-        if test.baseline == False:
+        if test.baseline == False and test.type != "PSAT ":
             self.num_tests+=1
         
     def growth(self):
