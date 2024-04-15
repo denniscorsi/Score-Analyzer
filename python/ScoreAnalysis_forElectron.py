@@ -836,168 +836,172 @@ def math_report():
     print("  "+"{:.0f}".format((float)(count_better_SAT)/total*100) + "% did better on the SAT")        
                
 
-load_student_data()
+# Removes all students who don't fit in the paramters
+def slice_data():
 
-print('Slicing data')
+  print('Slicing data')
 
-grad_year_min = int(parameters["year_lower"])
-grad_year_max = int(parameters["year_upper"])
+  grad_year_min = int(parameters["year_lower"])
+  grad_year_max = int(parameters["year_upper"])
 
-print('grad_year_min:', type(grad_year_min))
+  print('grad_year_min:', type(grad_year_min))
 
-to_remove_years = []
+  to_remove_years = []
 
-for student in students:
-    if student.gradyear < grad_year_min:
-        to_remove_years.append(student)
-    elif student.gradyear > grad_year_max:
-        to_remove_years.append(student)
+  for student in students:
+      if student.gradyear < grad_year_min:
+          to_remove_years.append(student)
+      elif student.gradyear > grad_year_max:
+          to_remove_years.append(student)
+          
+  for student in to_remove_years:
+      students.remove(student) 
+      print("REMOVED",student.fname, student.gradyear)
+          
+
+
+  hour_minimum = int(parameters["min_hours"])
+
+  to_remove = []
+
+  for student in students:
+      if student.tutoring_hours < hour_minimum:
+          to_remove.append(student) 
         
-for student in to_remove_years:
-    students.remove(student) 
-    print("REMOVED",student.fname, student.gradyear)
-        
-
-
-hour_minimum = int(parameters["min_hours"])
-
-to_remove = []
-
-for student in students:
-    if student.tutoring_hours < hour_minimum:
-        to_remove.append(student) 
+  for student in to_remove:
+      students.remove(student) 
+      print("REMOVED",student.fname, student.tutoring_hours)
       
-for student in to_remove:
-    students.remove(student) 
-    print("REMOVED",student.fname, student.tutoring_hours)
-    
-    
-    
-baseline_max = int(parameters["baseline_upper"])  
-
-to_remove_2 = []
-
-for student in students:
-    if student.tests[0].composite > baseline_max:
-        print("REMOVED",student.fname, student.tests[0].composite)
-        to_remove_2.append(student)
-        
-    #else:
-      #print("KEPT", student.fname, student.tutoring_hours)    
       
-for student in to_remove_2:
-    students.remove(student)  
-    
-
-baseline_min = int(parameters["baseline_lower"])    
-    
-to_remove_b = []    
-
-for student in students:
-    if student.tests[0].composite < baseline_min:
-        print("REMOVED",student.fname, student.tests[0].composite)
-        to_remove_b.append(student)
-        
-for student in to_remove_b:
-    students.remove(student)        
       
-section_baseline_max = int(parameters["section_baseline_upper "])     
-    
-to_remove_a = []
+  baseline_max = int(parameters["baseline_upper"])  
 
-for student in students:
-    student.update_baseline()
-    student.order_tests()
-    if student.baseline_score_math > section_baseline_max:
-        print("REMOVED FOR SECTION MAX", student.fname, student.tests[0].math)
-        to_remove_a.append(student)  
-    elif student.baseline_score_verbal > section_baseline_max:
-        print("REMOVED FOR SECTION MAX", student.fname, student.tests[0].verbal)
-        to_remove_a.append(student)  
+  to_remove_2 = []
 
-for student in to_remove_a:
-    students.remove(student)  
-
-# TODO: Add section baseline lower
-
-section_baseline_min = int(parameters["section_baseline_lower"])
-
-to_remove_c = []
-
-for student in students:
-    if student.baseline_score_math < section_baseline_min:
-        print("REMOVED FOR SECTION MIN", student.fname, student.tests[0].math)
-        to_remove_c.append(student)  
-    elif student.baseline_score_verbal < section_baseline_min:
-        print("REMOVED FOR SECTION MIN", student.fname, student.tests[0].verbal)
-        to_remove_c.append(student)  
-
-for student in to_remove_c:
-    students.remove(student)  
-    
-
-test_min = int(parameters["min_tests"])  
-
-to_remove_3 = []
-
-for student in students:
-    if len(student.tests) -1 < test_min:
-        print(student.fname, student.lname, len(student.tests))
-        to_remove_3.append(student)
+  for student in students:
+      if student.tests[0].composite > baseline_max:
+          print("REMOVED",student.fname, student.tests[0].composite)
+          to_remove_2.append(student)
+          
+      #else:
+        #print("KEPT", student.fname, student.tutoring_hours)    
         
-for student in to_remove_3:
-    students.remove(student)   
-    
-if parameters["exclude_without_baseline "] == 'true':
-  include_no_baseline = "n"
-else:
-  include_no_baseline = "y"  
+  for student in to_remove_2:
+      students.remove(student)  
+      
 
-for student in students:
-    student.update_baseline()
+  baseline_min = int(parameters["baseline_lower"])    
+      
+  to_remove_b = []    
 
-if include_no_baseline == "n":
-    to_remove_4 = []
-    count = 0
-    
-    for student in students:
-        if student.has_baseline is False:
-            count+=1
-            print("REMOVED",student.fname, student.has_baseline)
-            to_remove_4.append(student)
-            
-        #else:
-          #print("KEPT", student.fname, student.tutoring_hours)    
-    #print("removed " + str(count))     
-    for student in to_remove_4:
-        students.remove(student) 
+  for student in students:
+      if student.tests[0].composite < baseline_min:
+          print("REMOVED",student.fname, student.tests[0].composite)
+          to_remove_b.append(student)
+          
+  for student in to_remove_b:
+      students.remove(student)        
         
-if(parameters["exclude_incomplete "]== 'true'):
-    exclude_incomplete = "y"
-else:
-    exclude_incomplete = "n"
+  section_baseline_max = int(parameters["section_baseline_upper "])     
+      
+  to_remove_a = []
+
+  for student in students:
+      student.update_baseline()
+      student.order_tests()
+      if student.baseline_score_math > section_baseline_max:
+          print("REMOVED FOR SECTION MAX", student.fname, student.tests[0].math)
+          to_remove_a.append(student)  
+      elif student.baseline_score_verbal > section_baseline_max:
+          print("REMOVED FOR SECTION MAX", student.fname, student.tests[0].verbal)
+          to_remove_a.append(student)  
+
+  for student in to_remove_a:
+      students.remove(student)  
+
+  # TODO: Add section baseline lower
+
+  section_baseline_min = int(parameters["section_baseline_lower"])
+
+  to_remove_c = []
+
+  for student in students:
+      if student.baseline_score_math < section_baseline_min:
+          print("REMOVED FOR SECTION MIN", student.fname, student.tests[0].math)
+          to_remove_c.append(student)  
+      elif student.baseline_score_verbal < section_baseline_min:
+          print("REMOVED FOR SECTION MIN", student.fname, student.tests[0].verbal)
+          to_remove_c.append(student)  
+
+  for student in to_remove_c:
+      students.remove(student)  
+      
+
+  test_min = int(parameters["min_tests"])  
+
+  to_remove_3 = []
+
+  for student in students:
+      if len(student.tests) -1 < test_min:
+          print(student.fname, student.lname, len(student.tests))
+          to_remove_3.append(student)
+          
+  for student in to_remove_3:
+      students.remove(student)   
+      
+  if parameters["exclude_without_baseline "] == 'true':
+    include_no_baseline = "n"
+  else:
+    include_no_baseline = "y"  
+
+  for student in students:
+      student.update_baseline()
+
+  if include_no_baseline == "n":
+      to_remove_4 = []
+      count = 0
+      
+      for student in students:
+          if student.has_baseline is False:
+              count+=1
+              print("REMOVED",student.fname, student.has_baseline)
+              to_remove_4.append(student)
+              
+          #else:
+            #print("KEPT", student.fname, student.tutoring_hours)    
+      #print("removed " + str(count))     
+      for student in to_remove_4:
+          students.remove(student) 
+          
+  if(parameters["exclude_incomplete "]== 'true'):
+      exclude_incomplete = "y"
+  else:
+      exclude_incomplete = "n"
 
 
-if exclude_incomplete == "y":
+  if exclude_incomplete == "y":
 
-    to_remove_5 = []
-    count = 0
-    
-    for student in students:
-        if student.completion is False:
-            count+=1
-            #print("REMOVED",student.fname, student.has_baseline)
-            to_remove_5.append(student)
-            
-        #else:
-          #print("KEPT", student.fname, student.tutoring_hours)    
-    #print("removed " + str(count))     
-    for student in to_remove_5:
-        print("REMOVED",student.fname)
-        students.remove(student) 
+      to_remove_5 = []
+      count = 0
+      
+      for student in students:
+          if student.completion is False:
+              count+=1
+              #print("REMOVED",student.fname, student.has_baseline)
+              to_remove_5.append(student)
+              
+          #else:
+            #print("KEPT", student.fname, student.tutoring_hours)    
+      #print("removed " + str(count))     
+      for student in to_remove_5:
+          print("REMOVED",student.fname)
+          students.remove(student) 
         
         
 title = parameters["name"] 
+
+load_student_data()
+slice_data()
 
 #print("REMAINING")        
 #for student in students:
