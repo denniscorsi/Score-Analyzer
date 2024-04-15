@@ -423,7 +423,7 @@ class Student:
        
     def add_test(self, test): 
         self.tests.append(test)  
-        if test.baseline == False and test.type != "PSAT ":
+        if test.baseline == False and test.type != "PSAT " and test.type != "PACT ":
             self.num_tests+=1
         
     def growth(self):
