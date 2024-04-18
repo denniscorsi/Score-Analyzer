@@ -1,6 +1,7 @@
 import csv
 import datetime
 import sys
+import math
 
 arg0 = sys.argv[0]
 parameters = {
@@ -14,10 +15,11 @@ parameters = {
 "min_tests" : sys.argv[8],
 "exclude_without_baseline ": sys.argv[9],
 "exclude_incomplete ": sys.argv[10],
-"name" : sys.argv[11]
+"remove_if_missing_sections": sys.argv[11], # TODO: add this input in the main process.  
+"name" : sys.argv[12]
 }
-filePath = sys.argv[12]
-saveDir = sys.argv[13]
+filePath = sys.argv[13]
+saveDir = sys.argv[14]
 saveReportPath = saveDir + '/report.csv';
 print("inputs:", parameters, filePath )
 
@@ -324,6 +326,7 @@ class Test:
 
     def __init__(self, type, date, baseline, verbal, math, composite):
         self.type = type
+        self.is_estimated = False;
         if date == "0000-00-00":
             date = "0001-01-01"
         self.date = datetime.datetime.strptime(date, '%Y-%m-%d')
@@ -350,27 +353,31 @@ class Test:
             self.baseline = False  
         #self.setcomposite(verbal, math)
         
-    def setcomposite(self, verbal, math):
-        self.composite = int(verbal)+int(math)     
+    # def setcomposite(self, verbal, math):
+    #     self.composite = int(verbal)+int(math)     
         
 class Student:
     
     has_baseline = False
     baseline_score = False
     completion = True
+
+    missing_sections = False; # This will flip to true if ANY tests are missing section scores. Then this student can be dealt with later based on selected method 
     
     baseline_score_verbal = 0
     baseline_score_math = 0 
     
-    max_score = 0
+    max_composite = 0 # This is NOT superscored
+
+    max_score = 0 # This is superscored 
     max_score_verbal = 0
     max_score_math = 0
     
-    max_score_ACT = 0
+    max_score_ACT = 0 # This is superscored 
     max_score_ACT_verbal = 0
     max_score_ACT_math = 0
     
-    max_score_SAT = 0
+    max_score_SAT = 0 # This is superscored 
     max_score_SAT_verbal = 0
     max_score_SAT_math = 0
     
@@ -405,7 +412,10 @@ class Student:
             student_info = student_info + test.type
             # if test.type == 'SAT ' or test.type == "ACT ":
             #     student_info = student_info + '\t'
-            student_info = student_info + "\tV:" + str(test.verbal) + "  M:" + str(test.math) + "  Comp:" + str(test.composite) + "\n"
+            flag = ""
+            if test.is_estimated:
+                flag = "  **"
+            student_info = student_info + "\tV:" + str(test.verbal) + "  M:" + str(test.math) + "  Comp:" + str(test.composite) + flag + "\n"
         student_info = student_info + "Growth: " + str(self.growth())
         student_info = student_info + "\nNumber of non-baseline tests: " + str(self.num_tests)
         student_info = student_info + "\nVerbal growth: " + str(self.verbal_growth())
@@ -425,6 +435,9 @@ class Student:
         self.tests.append(test)  
         if test.baseline == False and test.type != "PSAT " and test.type != "PACT ":
             self.num_tests+=1
+        if test.verbal == 0 or test.math == 0:
+            self.missing_sections = True;
+        self.max_composite = max(self.max_composite, test.composite)
         
     def growth(self):
         self.update_baseline()
@@ -919,7 +932,6 @@ def slice_data():
   for student in to_remove_a:
       students.remove(student)  
 
-  # TODO: Add section baseline lower
 
   section_baseline_min = int(parameters["section_baseline_lower"])
 
@@ -996,7 +1008,53 @@ def slice_data():
       for student in to_remove_5:
           print("REMOVED",student.fname)
           students.remove(student) 
-        
+  
+  if parameters["remove_if_missing_sections"]:
+      to_remove_6 = []
+      # Check all students who have the missing sections tag 
+      for student in students: 
+          if student.missing_sections:
+              for test in student.tests:
+                  # See if the missing section is a baseline
+                  if test.baseline and test.verbal == 0:
+                      to_remove_6.append(student)
+                      break
+                  # See if the missing section is the highest composite 
+                  elif not test.baseline and test.verbal == 0:
+                      if test.composite == student.max_composite:
+                          to_remove_6.append(student)
+                          break;
+      for student in to_remove_6:
+        print("REMOVED",student.fname)
+        students.remove(student) 
+                  
+  else:
+      # estimate section scores for baseline or best tests without them
+      # reevaluate student's growth 
+      for student in students: 
+          if student.missing_sections:
+              for test in student.tests:
+                  # See if the missing section is a baseline
+                  if test.baseline and test.verbal == 0:
+                      # Estimate sections scores for baseline 
+                      # Determine section split for best math and best verbal
+                      ratio = student.max_score_verbal /  student.max_score
+                      test.verbal = math.ceil(test.composite * ratio)
+                      test.math = test.composite - test.math
+                      test.is_estimated = True
+                      student.update_baseline()
+                      break
+                      # thwn uise same split on baseline score
+                      # assign that test's sections 
+                      # add a flag to note they were estimated 
+                  elif not test.baseline and test.verbal == 0 and test.composite == student.max_composite:
+                      ratio = student.baseline_score_verbal / student.baseline_score
+                      test.verbal = math.ceil(test.composite * ratio)
+                      test.math = test.composite - test.math
+                      test.is_estimated = True
+                      student.update_baseline()
+                      break
+          
         
 title = parameters["name"] 
 
