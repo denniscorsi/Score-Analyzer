@@ -66,7 +66,7 @@ class Data:
     def calculate(self):
         self.numstudents = len(students)
         self.totalhours = self.sum_hours()
-        self.av_hours_per_student = self.totalhours/self.numstudents
+        self.av_hours_per_student = "{:.0f}".format(self.totalhours/self.numstudents)
         self.av_baseline = self.calc_av_baseline()
         self.av_verbal_baseline = self.calc_av_verbal_baseline()
         self.av_math_baseline = self.calc_av_math_baseline()
@@ -260,7 +260,7 @@ class Data:
                 sum+=student.baseline_score
                 count+=1
         print("Average Baseline: "+ str(sum/count))
-        return sum/count
+        return "{:.0f}".format(sum/count)
           
           
     def calc_av_verbal_baseline(self):
@@ -271,7 +271,7 @@ class Data:
                 sum+=student.baseline_score_verbal
                 count+=1
         print("Average Verbal Baseline: "+ str(sum/count))
-        return sum/count
+        return "{:.0f}".format(sum/count)
     
     def calc_av_math_baseline(self):
         sum = 0
@@ -281,7 +281,7 @@ class Data:
                 sum+=student.baseline_score_math
                 count+=1
         print("Average Math Baseline: "+ str(sum/count))
-        return sum/count
+        return "{:.0f}".format(sum/count)
 
     def calc_section_improvement(self):
         count = 0 
@@ -602,7 +602,7 @@ def av_growth_between_x_and_y(students, x, y):
             sum+=student.growth_between(x,y)
             count += 1
     if count>0:
-        return sum/count
+        return "{:.0f}".format(sum/count)
     else:
         return None
 
@@ -618,7 +618,7 @@ def av_growth_if_only_ACT(students):
             num_students+=1
     num_ACT_only = num_students
     if num_students>0:
-        return total_growth/num_students     
+        return "{:.0f}".format(total_growth/num_students)     
     else:
         return None 
     
@@ -634,7 +634,7 @@ def av_growth_if_only_SAT(students):
             num_students+=1
     num_SAT_only = num_students
     if num_students>0:
-        return total_growth/num_students     
+        return "{:.0f}".format(total_growth/num_students) 
     else:
         return None 
     
@@ -648,7 +648,7 @@ def av_growth_if_both(students):
             total_growth += student.growth()
             num_students+=1
     if num_students>0:
-        return total_growth/num_students     
+        return "{:.0f}".format(total_growth/num_students)     
     else:
         return None 
     
@@ -668,8 +668,8 @@ def av_total_growth_if_x_tests(studentlist, x):
             total_hours+=student.tutoring_hours
     student_counts.append(num_students)
     if num_students>0: 
-        hours_counts.append(total_hours/num_students)       
-        return total_growth/num_students  #, num_students 
+        hours_counts.append("{:.0f}".format(total_hours/num_students))       
+        return "{:.0f}".format(total_growth/num_students)  #, num_students 
     else:
         hours_counts.append(0)
         return "none"         
@@ -761,7 +761,7 @@ def av_growth_all_students(studentset):
     student_counts.append("-")
     
     if total_students_growth >0:
-        hours_counts.append(total_hours/total_students_growth)
+        hours_counts.append("{:.0f}".format(total_hours/total_students_growth))
         hours_counts.append("-")
     else:
         hours_counts.append(0)   
@@ -769,7 +769,7 @@ def av_growth_all_students(studentset):
         
     if total_students_growth == 0:
         return None
-    return total_growth/total_students_growth
+    return "{:.0f}".format(total_growth/total_students_growth)
 
 def av_growth_between_x_and_y_hours(x,y):
     num_students = 0
@@ -784,8 +784,8 @@ def av_growth_between_x_and_y_hours(x,y):
             total_growth+=student.growth()
     student_counts.append(num_students)
     if num_students>0:
-        hours_counts.append(total_hours/num_students)
-        return total_growth/num_students    
+        hours_counts.append("{:.0f}".format(total_hours/num_students))
+        return "{:.0f}".format(total_growth/num_students)    
     else:
         hours_counts.append(0)
         return "No students"    
