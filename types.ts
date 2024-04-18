@@ -7,4 +7,5 @@ export interface Parameters {
   excludeWithoutBaseline: boolean;
   excludeIncomplete: boolean;
   name: string | null;
+  remove: boolean;
 }

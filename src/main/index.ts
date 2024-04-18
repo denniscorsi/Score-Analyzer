@@ -1,9 +1,9 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
-import { join, basename } from 'path';
-import fs from 'fs';
-import { exec } from 'child_process';
-import { PythonShell } from 'python-shell';
-import fixPath from 'fix-path';
+import { app, BrowserWindow, ipcMain, dialog, shell } from "electron";
+import { join, basename } from "path";
+import fs from "fs";
+import { exec } from "child_process";
+import { PythonShell } from "python-shell";
+import fixPath from "fix-path";
 // const { updateElectronApp } = require('update-electron-app');
 // updateElectronApp();
 
@@ -11,67 +11,61 @@ let window: BrowserWindow | null = null;
 let filePath: string | null = null;
 
 const appPath = app.getAppPath();
-const documentsPath = app.getPath('documents');
-const reportPath = documentsPath + '/report.csv';
-const logFilePath = join(app.getPath('userData'), 'app.log');
-const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+const documentsPath = app.getPath("documents");
+const reportPath = documentsPath + "/report.csv";
+const logFilePath = join(app.getPath("userData"), "app.log");
+const logStream = fs.createWriteStream(logFilePath, { flags: "a" });
 
 console.log = function (message) {
-  if (typeof message === 'object')
-    logStream.write(`${JSON.stringify(message)}\n`);
+  if (typeof message === "object") logStream.write(`${JSON.stringify(message)}\n`);
   else logStream.write(`${message}\n`);
 };
 
 console.error = function (message) {
-  logStream.write('ERROR\n');
-  if (typeof message === 'object')
-    logStream.write(`${JSON.stringify(message)}\n`);
+  logStream.write("ERROR\n");
+  if (typeof message === "object") logStream.write(`${JSON.stringify(message)}\n`);
   else logStream.write(`${message}\n`);
 };
 
 const createWindow = () => {
   window = new BrowserWindow({
     width: 1300,
-    height: 800,
+    height: 900,
     minHeight: 780,
     minWidth: 1000,
-    icon: join(__dirname, 'icons/icon.icns'),
+    icon: join(__dirname, "icons/icon.icns"),
     webPreferences: {
-      preload: join(__dirname, 'preload.js'),
-    },
+      preload: join(__dirname, "preload.js")
+    }
   });
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     window.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    window.loadFile(
-      join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
-    );
+    window.loadFile(join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
-  console.log('App Path:' + appPath);
+  console.log("App Path:" + appPath);
 
-  console.log('Path:' + process.env.PATH);
-  console.log('About to run fixPath');
+  console.log("Path:" + process.env.PATH);
+  console.log("About to run fixPath");
   fixPath();
   // process.env.PATH = '/usr/sbin';
-  console.log('Path:' + process.env.PATH);
+  console.log("Path:" + process.env.PATH);
 
   return window;
 };
 
-app.on('ready', () => {
+app.on("ready", () => {
   createWindow();
 });
 
 // app.dock.setIcon(join(__dirname, '../..', 'icons', 'pinnacle-prep-logo.gif'));
 
-ipcMain.handle('load-file', async () => {
+ipcMain.handle("load-file", async () => {
   const result = await dialog.showOpenDialog(window!, {
-    properties: ['openFile'],
-    filters: [
-      { name: 'CSVs', extensions: ['csv', 'xls', 'xlsx', 'txt', 'Numbers'] },
-    ],
+    properties: ["openFile"],
+    filters: [{ name: "CSVs", extensions: ["csv", "xls", "xlsx", "txt", "Numbers"] }]
   });
 
   if (result.canceled) return null;
@@ -79,20 +73,18 @@ ipcMain.handle('load-file', async () => {
   return basename(filePath);
 });
 
-ipcMain.handle('run-analysis', (_, parameters) => {
+ipcMain.handle("run-analysis", (_, parameters) => {
   console.log(parameters);
   console.log(filePath);
-  let parameterString = '';
-  parameterString += parameters.years[0] + ' ' + parameters.years[1] + ' ';
-  parameterString +=
-    parameters.baseline[0] + ' ' + parameters.baseline[1] + ' ';
-  parameterString +=
-    parameters.sectionBaseline[0] + ' ' + parameters.sectionBaseline[1] + ' ';
-  parameterString += parameters.minTutoringHours + ' ';
-  parameterString += parameters.minTests + ' ';
-  parameterString += parameters.excludeWithoutBaseline + ' ';
-  parameterString += parameters.excludeIncomplete + ' ';
-  parameterString += `"${parameters.name}"` + ' ';
+  let parameterString = "";
+  parameterString += parameters.years[0] + " " + parameters.years[1] + " ";
+  parameterString += parameters.baseline[0] + " " + parameters.baseline[1] + " ";
+  parameterString += parameters.sectionBaseline[0] + " " + parameters.sectionBaseline[1] + " ";
+  parameterString += parameters.minTutoringHours + " ";
+  parameterString += parameters.minTests + " ";
+  parameterString += parameters.excludeWithoutBaseline + " ";
+  parameterString += parameters.excludeIncomplete + " ";
+  parameterString += `"${parameters.name}"` + " ";
   parameterString += `"${filePath}"`;
 
   exec(
@@ -108,21 +100,21 @@ ipcMain.handle('run-analysis', (_, parameters) => {
   );
 });
 
-ipcMain.on('open-report', () => {
+ipcMain.on("open-report", () => {
   shell.openPath(reportPath);
 });
 
-ipcMain.on('open-students', () => {
-  shell.openPath(documentsPath + '/slice.txt');
+ipcMain.on("open-students", () => {
+  shell.openPath(documentsPath + "/slice.txt");
 });
 
-ipcMain.on('clear-report', () => {
+ipcMain.on("clear-report", () => {
   fs.unlink(reportPath, (err) => {
     if (err) {
-      console.error('Error deleting file:', err);
+      console.error("Error deleting file:", err);
       return;
     }
 
-    console.log('File deleted successfully');
+    console.log("File deleted successfully");
   });
 });

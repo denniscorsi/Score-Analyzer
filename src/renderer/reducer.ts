@@ -1,4 +1,4 @@
-import { Parameters } from '../../types';
+import { Parameters } from "../../types";
 
 interface Action {
   type: string;
@@ -7,66 +7,71 @@ interface Action {
 
 const reducer = (state: Parameters, action: Action) => {
   switch (action.type) {
-    case 'set_years':
+    case "set_years":
       return {
         ...state,
         years: action.payload,
         baseline: [...state.baseline],
-        sectionBaseline: [...state.sectionBaseline],
+        sectionBaseline: [...state.sectionBaseline]
       };
-    case 'set_baseline':
+    case "set_baseline":
       return {
         ...state,
         years: [...state.years],
         baseline: action.payload,
-        sectionBaseline: [...state.sectionBaseline],
+        sectionBaseline: [...state.sectionBaseline]
       };
-    case 'set_section_baseline':
+    case "set_section_baseline":
       return {
         ...state,
         years: [...state.years],
         baseline: [...state.baseline],
-        sectionBaseline: action.payload,
+        sectionBaseline: action.payload
       };
-    case 'set_min_tutoring_hours':
-      return {
-        ...state,
-        years: [...state.years],
-        baseline: [...state.baseline],
-        sectionBaseline: [...state.sectionBaseline],
-        minTutoringHours: action.payload[0],
-      };
-    case 'set_min_tests':
+    case "set_min_tutoring_hours":
       return {
         ...state,
         years: [...state.years],
         baseline: [...state.baseline],
         sectionBaseline: [...state.sectionBaseline],
-        minTests: action.payload[0],
+        minTutoringHours: action.payload[0]
       };
-    case 'set_exclude_without_baseline':
+    case "set_min_tests":
       return {
         ...state,
         years: [...state.years],
         baseline: [...state.baseline],
         sectionBaseline: [...state.sectionBaseline],
-        excludeWithoutBaseline: action.payload,
+        minTests: action.payload[0]
       };
-    case 'set_exclude_incomplete':
+    case "set_exclude_without_baseline":
       return {
         ...state,
         years: [...state.years],
         baseline: [...state.baseline],
         sectionBaseline: [...state.sectionBaseline],
-        excludeIncomplete: action.payload,
+        excludeWithoutBaseline: action.payload
       };
-    case 'set_name':
+    case "set_exclude_incomplete":
       return {
         ...state,
         years: [...state.years],
         baseline: [...state.baseline],
         sectionBaseline: [...state.sectionBaseline],
-        name: action.payload,
+        excludeIncomplete: action.payload
+      };
+    case "set_name":
+      return {
+        ...state,
+        years: [...state.years],
+        baseline: [...state.baseline],
+        sectionBaseline: [...state.sectionBaseline],
+        name: action.payload
+      };
+    case "flip_section_behavior":
+      return {
+        ...state,
+        remove: !state.remove
       };
     default:
       return state;

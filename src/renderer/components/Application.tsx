@@ -1,18 +1,13 @@
-import React, { useState, useReducer } from 'react';
-import {
-  Typography,
-  Button,
-  TextField,
-  Box,
-  LinearProgress,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import React, { useState, useReducer } from "react";
+import { Typography, Button, TextField, Box, LinearProgress } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
-import CustomSlider from './CustomSlider';
-import CustomCheckbox from './CustomCheckbox';
-import { Parameters } from '../../../types';
-import reducer from '../reducer';
-import Settings from './Settings';
+import CustomSlider from "./CustomSlider";
+import CustomCheckbox from "./CustomCheckbox";
+import { Parameters } from "../../../types";
+import reducer from "../reducer";
+import Settings from "./Settings";
+import CustomToggle from "./CustomToggle";
 
 const defaultParameters: Parameters = {
   years: [2020, 2026],
@@ -23,12 +18,13 @@ const defaultParameters: Parameters = {
   excludeWithoutBaseline: false,
   excludeIncomplete: false,
   name: null,
+  remove: true
 };
 
 const Application = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [hasName, setHasName] = useState(false);
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState("");
   const [state, dispatch] = useReducer(reducer, defaultParameters);
   const [reportReady, setReportReady] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -59,29 +55,29 @@ const Application = () => {
     <div
       id="outer-container"
       style={{
-        display: 'flex',
-        height: '97vh',
-        justifyContent: 'center',
-        alignItems: 'center',
+        display: "flex",
+        height: "97vh",
+        justifyContent: "center",
+        alignItems: "center"
       }}
     >
       <div
         id="border"
         style={{
-          display: 'flex',
-          border: '15px solid #00843A',
-          width: '97%',
-          height: '85%',
-          padding: '20px 10px',
+          display: "flex",
+          border: "15px solid #00843A",
+          width: "97%",
+          height: "85%",
+          padding: "20px 10px"
         }}
       >
         <div
           id="left"
           style={{
-            padding: '10px 20px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
+            padding: "10px 20px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between"
           }}
         >
           <div>
@@ -91,7 +87,7 @@ const Application = () => {
               color="secondary"
               onClick={loadFile}
               style={{
-                margin: '15px 0px',
+                margin: "15px 0px"
               }}
             >
               Load File
@@ -103,31 +99,31 @@ const Application = () => {
               id="runButton"
               variant="contained"
               color="secondary"
-              style={{ display: 'block', margin: '20px 0px' }}
+              style={{ display: "block", margin: "20px 0px" }}
               disabled={!hasName}
               onClick={sendParameters}
             >
               Run analysis
             </Button>
             {loading && (
-              <Box sx={{ width: '100%' }}>
+              <Box sx={{ width: "100%" }}>
                 <LinearProgress />
               </Box>
             )}
             <Button
               id="openReportButton"
               variant="contained"
-              style={{ display: 'block' }}
+              style={{ display: "block" }}
               disabled={!reportReady}
               onClick={window.api.openReport}
             >
               Open Report
             </Button>
             <Button
-              sx={{ marginTop: '20px' }}
+              sx={{ marginTop: "20px" }}
               id="openStudentButton"
               variant="contained"
-              style={{ display: 'block' }}
+              style={{ display: "block" }}
               disabled={!reportReady}
               onClick={window.api.openStudents}
             >
@@ -135,9 +131,9 @@ const Application = () => {
             </Button>
           </Box>
         </div>
-        <div id="right" style={{ flexGrow: 1, padding: '20px 50px' }}>
+        <div id="right" style={{ flexGrow: 1, padding: "20px 50px" }}>
           <CustomSlider
-            title={'Grad Years'}
+            title={"Grad Years"}
             startingValues={[2020, 2026]}
             min={2020}
             max={2026}
@@ -148,7 +144,7 @@ const Application = () => {
             action="set_years"
           />
           <CustomSlider
-            title={'Baseline'}
+            title={"Baseline"}
             startingValues={[0, 1600]}
             min={0}
             max={1600}
@@ -159,7 +155,7 @@ const Application = () => {
             action="set_baseline"
           />
           <CustomSlider
-            title={'Section Baseline'}
+            title={"Section Baseline"}
             startingValues={[0, 800]}
             min={0}
             max={800}
@@ -170,7 +166,7 @@ const Application = () => {
             action="set_section_baseline"
           />
           <CustomSlider
-            title={'Minimum Tutoring Hours'}
+            title={"Minimum Tutoring Hours"}
             startingValues={[0]}
             min={0}
             max={200}
@@ -181,7 +177,7 @@ const Application = () => {
             action="set_min_tutoring_hours"
           />
           <CustomSlider
-            title={'Minimum Tests After Baseline'}
+            title={"Minimum Tests After Baseline"}
             startingValues={[1]}
             min={1}
             max={6}
@@ -192,29 +188,30 @@ const Application = () => {
             action="set_min_tests"
           />
           <CustomCheckbox
-            label={'Exclude students without a baseline'}
+            label={"Exclude students without a baseline"}
             isEnabled={isEnabled}
             dispatch={dispatch}
             action="set_exclude_without_baseline"
           />
           <CustomCheckbox
-            label={'Exclude students marked incomplete'}
+            label={"Exclude students marked incomplete"}
             isEnabled={isEnabled}
             dispatch={dispatch}
             action="set_exclude_incomplete"
           />
+          <CustomToggle isEnabled={isEnabled} dispatch={dispatch} />
 
           <TextField
             disabled={!isEnabled}
             variant="outlined"
             label="Name of analysis"
             sx={{
-              width: '400px',
-              marginRight: '20px',
-              marginTop: '15px',
+              width: "400px",
+              marginRight: "20px",
+              marginTop: "15px"
             }}
             onChange={(event) => {
-              dispatch({ type: 'set_name', payload: event.target.value });
+              dispatch({ type: "set_name", payload: event.target.value });
               if (event.target.value) setHasName(true);
               else setHasName(false);
             }}
@@ -223,9 +220,9 @@ const Application = () => {
         <div
           id="logo"
           style={{
-            position: 'absolute',
-            bottom: '60px',
-            right: '35px',
+            position: "absolute",
+            bottom: "60px",
+            right: "35px"
           }}
         >
           {/* <img
