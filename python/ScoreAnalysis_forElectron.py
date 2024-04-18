@@ -1043,12 +1043,14 @@ def slice_data():
                       # Determine section split for best math and best verbal
                       if student.max_score == 0: # This is for the rare case where all sections are 0
                           student.max_score = student.max_composite
+                          student.max_score_verbal = math.ceil(student.max_composite / 2)
+                          student.max_score_math = student.max_score - student.max_score_verbal
                       ratio = student.max_score_verbal /  student.max_score
                       test.verbal = math.ceil(test.composite * ratio)
                       test.math = test.composite - test.verbal
                       test.is_estimated = True
                       student.update_baseline()
-                      break
+                      # break
                       # thwn uise same split on baseline score
                       # assign that test's sections 
                       # add a flag to note they were estimated 
@@ -1058,7 +1060,7 @@ def slice_data():
                       test.math = test.composite - test.verbal
                       test.is_estimated = True
                       student.update_baseline()
-                      break
+                      # break
           
         
 title = parameters["name"] 
