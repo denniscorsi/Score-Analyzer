@@ -15,7 +15,7 @@ parameters = {
 "min_tests" : sys.argv[8],
 "exclude_without_baseline ": sys.argv[9],
 "exclude_incomplete ": sys.argv[10],
-"remove_if_missing_sections": sys.argv[11], # TODO: add this input in the main process.  
+"remove_if_missing_sections": sys.argv[11], 
 "name" : sys.argv[12]
 }
 filePath = sys.argv[13]
@@ -414,7 +414,7 @@ class Student:
             #     student_info = student_info + '\t'
             flag = ""
             if test.is_estimated:
-                flag = "  **"
+                flag = "  * estimated *"
             student_info = student_info + "\tV:" + str(test.verbal) + "  M:" + str(test.math) + "  Comp:" + str(test.composite) + flag + "\n"
         student_info = student_info + "Growth: " + str(self.growth())
         student_info = student_info + "\nNumber of non-baseline tests: " + str(self.num_tests)
@@ -1009,7 +1009,8 @@ def slice_data():
           print("REMOVED",student.fname)
           students.remove(student) 
   
-  if parameters["remove_if_missing_sections"]:
+  if parameters["remove_if_missing_sections"] == "true":
+      print("REMOVING FOR MISSING SECTIONS")
       to_remove_6 = []
       # Check all students who have the missing sections tag 
       for student in students: 
@@ -1029,6 +1030,8 @@ def slice_data():
         students.remove(student) 
                   
   else:
+      print("ESTIMATING FOR MISSING SECTIONS")
+      
       # estimate section scores for baseline or best tests without them
       # reevaluate student's growth 
       for student in students: 
@@ -1038,9 +1041,11 @@ def slice_data():
                   if test.baseline and test.verbal == 0:
                       # Estimate sections scores for baseline 
                       # Determine section split for best math and best verbal
+                      if student.max_score == 0: # This is for the rare case where all sections are 0
+                          student.max_score = student.max_composite
                       ratio = student.max_score_verbal /  student.max_score
                       test.verbal = math.ceil(test.composite * ratio)
-                      test.math = test.composite - test.math
+                      test.math = test.composite - test.verbal
                       test.is_estimated = True
                       student.update_baseline()
                       break
@@ -1050,7 +1055,7 @@ def slice_data():
                   elif not test.baseline and test.verbal == 0 and test.composite == student.max_composite:
                       ratio = student.baseline_score_verbal / student.baseline_score
                       test.verbal = math.ceil(test.composite * ratio)
-                      test.math = test.composite - test.math
+                      test.math = test.composite - test.verbal
                       test.is_estimated = True
                       student.update_baseline()
                       break

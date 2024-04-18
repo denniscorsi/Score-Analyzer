@@ -84,6 +84,7 @@ ipcMain.handle("run-analysis", (_, parameters) => {
   parameterString += parameters.minTests + " ";
   parameterString += parameters.excludeWithoutBaseline + " ";
   parameterString += parameters.excludeIncomplete + " ";
+  parameterString += parameters.remove + " ";
   parameterString += `"${parameters.name}"` + " ";
   parameterString += `"${filePath}"`;
 

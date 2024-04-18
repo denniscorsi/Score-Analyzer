@@ -72,11 +72,11 @@ const CustomToggle: React.FC<ToggleComponent> = ({ isEnabled, dispatch }) => {
           How should missing sections be handled?
         </Typography>
         <Typography color={color} paddingRight={1}>
-          Removed
+          Remove
         </Typography>
         <FormControlLabel
           control={<MaterialUISwitch onChange={flipSwitch} disabled={!isEnabled} sx={{ m: 1 }} />}
-          label="Estimated"
+          label="Estimate"
         />
       </Box>
     </>
