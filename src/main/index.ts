@@ -30,7 +30,7 @@ console.error = function (message) {
 const createWindow = () => {
   window = new BrowserWindow({
     width: 1300,
-    height: 900,
+    height: 950,
     minHeight: 780,
     minWidth: 1000,
     icon: join(__dirname, "icons/icon.icns"),

@@ -15,6 +15,7 @@ const defaultParameters: Parameters = {
   sectionBaseline: [0, 800],
   minTutoringHours: 0,
   minTests: 1,
+  minBestScore: 0,
   excludeWithoutBaseline: false,
   excludeIncomplete: false,
   name: null,
@@ -166,6 +167,17 @@ const Application = () => {
             isEnabled={isEnabled}
             dispatch={dispatch}
             action="set_section_baseline"
+          />
+          <CustomSlider
+            title={"Minimum Best Score"}
+            startingValues={[0]}
+            min={0}
+            max={1600}
+            step={10}
+            allowRange={false}
+            isEnabled={isEnabled}
+            dispatch={dispatch}
+            action="set_min_best_score"
           />
           <CustomSlider
             title={"Minimum Tutoring Hours"}
