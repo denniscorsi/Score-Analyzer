@@ -15,6 +15,7 @@ const defaultParameters: Parameters = {
   sectionBaseline: [0, 800],
   minTutoringHours: 0,
   minTests: 1,
+  minBestScore: 0,
   excludeWithoutBaseline: false,
   excludeIncomplete: false,
   name: null,
@@ -29,6 +30,8 @@ const Application = () => {
   const [reportReady, setReportReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [minYear, setMinYear] = useState(2020);
+  const [maxYear, setMaxYear] = useState(2026);
 
   useTheme();
 
@@ -134,9 +137,9 @@ const Application = () => {
         <div id="right" style={{ flexGrow: 1, padding: "20px 50px" }}>
           <CustomSlider
             title={"Grad Years"}
-            startingValues={[2020, 2026]}
-            min={2020}
-            max={2026}
+            startingValues={[minYear, maxYear]}
+            min={minYear}
+            max={maxYear}
             step={1}
             allowRange={true}
             isEnabled={isEnabled}
@@ -164,6 +167,17 @@ const Application = () => {
             isEnabled={isEnabled}
             dispatch={dispatch}
             action="set_section_baseline"
+          />
+          <CustomSlider
+            title={"Minimum Best Score"}
+            startingValues={[0]}
+            min={0}
+            max={1600}
+            step={10}
+            allowRange={false}
+            isEnabled={isEnabled}
+            dispatch={dispatch}
+            action="set_min_best_score"
           />
           <CustomSlider
             title={"Minimum Tutoring Hours"}
@@ -234,7 +248,14 @@ const Application = () => {
           <Button onClick={() => setOpen(true)}>Settings</Button>
         </div>
       </div>
-      <Settings open={open} setOpen={setOpen} />
+      <Settings
+        open={open}
+        setOpen={setOpen}
+        setMinYear={setMinYear}
+        setMaxYear={setMaxYear}
+        minYear={minYear}
+        maxYear={maxYear}
+      />
     </div>
   );
 };

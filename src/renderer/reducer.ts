@@ -36,6 +36,14 @@ const reducer = (state: Parameters, action: Action) => {
         sectionBaseline: [...state.sectionBaseline],
         minTutoringHours: action.payload[0]
       };
+    case "set_min_best_score":
+      return {
+        ...state,
+        years: [...state.years],
+        baseline: [...state.baseline],
+        sectionBaseline: [...state.sectionBaseline],
+        minBestScore: action.payload[0]
+      };
     case "set_min_tests":
       return {
         ...state,

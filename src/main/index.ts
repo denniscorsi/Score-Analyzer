@@ -2,7 +2,6 @@ import { app, BrowserWindow, ipcMain, dialog, shell } from "electron";
 import { join, basename } from "path";
 import fs from "fs";
 import { exec } from "child_process";
-import { PythonShell } from "python-shell";
 import fixPath from "fix-path";
 // const { updateElectronApp } = require('update-electron-app');
 // updateElectronApp();
@@ -30,7 +29,7 @@ console.error = function (message) {
 const createWindow = () => {
   window = new BrowserWindow({
     width: 1300,
-    height: 900,
+    height: 950,
     minHeight: 780,
     minWidth: 1000,
     icon: join(__dirname, "icons/icon.icns"),
@@ -85,6 +84,7 @@ ipcMain.handle("run-analysis", (_, parameters) => {
   parameterString += parameters.excludeWithoutBaseline + " ";
   parameterString += parameters.excludeIncomplete + " ";
   parameterString += parameters.remove + " ";
+  parameterString += parameters.minBestScore + " ";
   parameterString += `"${parameters.name}"` + " ";
   parameterString += `"${filePath}"`;
 

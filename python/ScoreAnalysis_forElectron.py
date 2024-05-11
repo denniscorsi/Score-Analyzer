@@ -5,21 +5,22 @@ import math
 
 arg0 = sys.argv[0]
 parameters = {
-"year_lower": sys.argv[1],
-"year_upper" : sys.argv[2],
-"baseline_lower" : sys.argv[3],
-"baseline_upper" : sys.argv[4],
-"section_baseline_lower" : sys.argv[5],
-"section_baseline_upper ": sys.argv[6],
-"min_hours" : sys.argv[7],
-"min_tests" : sys.argv[8],
-"exclude_without_baseline ": sys.argv[9],
-"exclude_incomplete ": sys.argv[10],
-"remove_if_missing_sections": sys.argv[11], 
-"name" : sys.argv[12]
+  "year_lower": sys.argv[1],
+  "year_upper" : sys.argv[2],
+  "baseline_lower" : sys.argv[3],
+  "baseline_upper" : sys.argv[4],
+  "section_baseline_lower" : sys.argv[5],
+  "section_baseline_upper ": sys.argv[6],
+  "min_hours" : sys.argv[7],
+  "min_tests" : sys.argv[8],
+  "exclude_without_baseline ": sys.argv[9],
+  "exclude_incomplete ": sys.argv[10],
+  "remove_if_missing_sections": sys.argv[11], 
+  "min_best_score": sys.argv[12],
+  "name" : sys.argv[13]
 }
-filePath = sys.argv[13]
-saveDir = sys.argv[14]
+filePath = sys.argv[14]
+saveDir = sys.argv[15]
 saveReportPath = saveDir + '/report.csv';
 print("inputs:", parameters, filePath )
 
@@ -1009,6 +1010,19 @@ def slice_data():
           print("REMOVED",student.fname)
           students.remove(student) 
   
+
+  min_best_score = int(parameters["min_best_score"])  
+
+  to_remove_min_best_score = []
+
+  for student in students:
+      if student.max_score < min_best_score:
+          to_remove_min_best_score.append(student)
+          
+  for student in to_remove_min_best_score:
+      print("REMOVED",student.fname)
+      students.remove(student)   
+
   if parameters["remove_if_missing_sections"] == "true":
       print("REMOVING FOR MISSING SECTIONS")
       to_remove_6 = []
