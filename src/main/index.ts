@@ -2,7 +2,6 @@ import { app, BrowserWindow, ipcMain, dialog, shell } from "electron";
 import { join, basename } from "path";
 import fs from "fs";
 import { exec } from "child_process";
-import { PythonShell } from "python-shell";
 import fixPath from "fix-path";
 // const { updateElectronApp } = require('update-electron-app');
 // updateElectronApp();
@@ -85,6 +84,7 @@ ipcMain.handle("run-analysis", (_, parameters) => {
   parameterString += parameters.excludeWithoutBaseline + " ";
   parameterString += parameters.excludeIncomplete + " ";
   parameterString += parameters.remove + " ";
+  parameterString += parameters.minBestScore + " ";
   parameterString += `"${parameters.name}"` + " ";
   parameterString += `"${filePath}"`;
 
