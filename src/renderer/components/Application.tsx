@@ -29,6 +29,8 @@ const Application = () => {
   const [reportReady, setReportReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [minYear, setMinYear] = useState(2020);
+  const [maxYear, setMaxYear] = useState(2026);
 
   useTheme();
 
@@ -134,9 +136,9 @@ const Application = () => {
         <div id="right" style={{ flexGrow: 1, padding: "20px 50px" }}>
           <CustomSlider
             title={"Grad Years"}
-            startingValues={[2020, 2026]}
-            min={2020}
-            max={2026}
+            startingValues={[minYear, maxYear]}
+            min={minYear}
+            max={maxYear}
             step={1}
             allowRange={true}
             isEnabled={isEnabled}
@@ -234,7 +236,14 @@ const Application = () => {
           <Button onClick={() => setOpen(true)}>Settings</Button>
         </div>
       </div>
-      <Settings open={open} setOpen={setOpen} />
+      <Settings
+        open={open}
+        setOpen={setOpen}
+        setMinYear={setMinYear}
+        setMaxYear={setMaxYear}
+        minYear={minYear}
+        maxYear={maxYear}
+      />
     </div>
   );
 };
